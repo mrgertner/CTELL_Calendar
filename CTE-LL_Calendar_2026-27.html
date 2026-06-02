@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2026–27 CTE–Linked Learning Calendar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin:0; padding:0; }
+body {
+    font-family: 'Poppins', sans-serif;
+    font-size: 15px;
+    background: #fff;
+    color: #1a1a2e;
+    line-height: 1.5;
+}
+
+/* ── Cover ── */
+.cover {
+    background: #00237A;
+    color: #FFFFFF;
+    padding: 28px 52px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    flex-wrap: wrap;
+}
+.cover-left {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+.cover-seal {
+    height: 80px;
+    width: 80px;
+    flex-shrink: 0;
+}
+.cover-wordmark {
+    height: 28px;
+    width: auto;
+    display: block;
+    margin-bottom: 8px;
+    filter: brightness(0) invert(1);
+}
+.cover-text {
+    display: flex;
+    flex-direction: column;
+}
+.cover-title {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+    line-height: 1.2;
+}
+.cover-title span { color: #F2A900; }
+.cover-sub {
+    font-size: 12px;
+    color: rgba(255,255,255,0.55);
+    margin-top: 5px;
+}
+.cover-right {
+    text-align: right;
+}
+.cover-year {
+    font-size: 60px;
+    font-weight: 700;
+    color: #F2A900;
+    line-height: 1;
+    letter-spacing: -2px;
+    opacity: 0.9;
+}
+
+/* ── Legend bar ── */
+.legend-bar {
+    background: #f7f8fc;
+    border-bottom: 2px solid #00237A;
+    padding: 11px 52px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    box-shadow: 0 2px 6px rgba(0,0,35,0.06);
+}
+.legend-bar .lbl {
+    font-weight: 700;
+    color: #00237A;
+    margin-right: 4px;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+}
+.leg-item {
+    font-size: 12px;
+    color: #444;
+    white-space: nowrap;
+}
+.status-note {
+    margin-left: auto;
+    font-size: 11px;
+    color: #666;
+}
+.badge.confirmed { color: #1a7a1a; font-weight: 800; }
+.badge.hold      { color: #b02020; font-weight: 800; }
+
+/* ── Calendar body ── */
+.calendar-body {
+    padding: 0 52px 48px;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+/* ── Each month row ── */
+.month-row {
+    display: grid;
+    grid-template-columns: 1fr 260px;
+    gap: 24px;
+    padding: 20px 0 22px;
+    border-bottom: 2px solid #00237A;
+}
+.month-row:first-child {
+    border-top: 2px solid #00237A;
+}
+
+/* ── Event list ── */
+.month-event-col {
+    min-width: 0;
+}
+.month-name-badge {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: #FFFFFF;
+    background: #00237A;
+    display: inline-block;
+    padding: 4px 14px;
+    border-radius: 4px;
+    margin-bottom: 12px;
+}
+.event-list {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+.evt-row {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    line-height: 1.4;
+    cursor: default;
+}
+.evt-day {
+    font-size: 12px;
+    font-weight: 700;
+    color: #00237A;
+    min-width: 30px;
+    text-align: right;
+    flex-shrink: 0;
+}
+.evt-pill {
+    font-size: 12px;
+    padding: 2px 7px;
+    border-radius: 4px;
+    font-weight: 500;
+    line-height: 1.45;
+    word-break: break-word;
+}
+.no-events {
+    color: #aaa;
+    font-size: 13px;
+    font-style: italic;
+}
+
+/* ── Mini calendar grid ── */
+.month-grid-col {
+    flex-shrink: 0;
+    align-self: start;
+    padding-top: 4px;
+}
+.cal-grid {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+.cal-grid thead th {
+    font-size: 11px;
+    font-weight: 600;
+    color: #888;
+    text-align: center;
+    padding: 3px 2px 4px;
+    border-bottom: 1px solid #ddd;
+}
+.cal-grid tbody td {
+    height: 30px;
+    text-align: center;
+    vertical-align: middle;
+    padding: 2px 1px;
+    border: 0.5px solid #ebebeb;
+    position: relative;
+}
+.cal-grid tbody td.empty { background: #f9f9f9; }
+.cal-grid tbody td.wknd  { background: #f5f5f5; }
+.cal-grid tbody td.today { outline: 2px solid #F2A900; outline-offset: -2px; }
+.gday {
+    font-size: 11px;
+    font-weight: 500;
+    color: #444;
+    display: block;
+    line-height: 1;
+}
+.dots {
+    display: flex;
+    justify-content: center;
+    gap: 2px;
+    margin-top: 2px;
+}
+.dot {
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+/* ── Footer ── */
+.footer {
+    border-top: 2px solid #00237A;
+    padding: 16px 52px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 11px;
+    color: #666;
+    flex-wrap: wrap;
+    gap: 8px;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+.footer-left { font-weight: 600; color: #00237A; }
+
+/* ── Print ── */
+@media print {
+    .legend-bar { position: static; box-shadow: none; }
+    .month-row { break-inside: avoid; page-break-inside: avoid; }
+    .calendar-body { padding: 0 20px 20px; max-width: none; }
+    .cover { padding: 20px; }
+    .footer { max-width: none; padding: 12px 20px; }
+}
+@media (max-width: 700px) {
+    .month-row { grid-template-columns: 1fr; }
+    .month-grid-col { display: none; }
+    .calendar-body { padding: 0 16px 24px; }
+    .cover { padding: 20px; }
+    .legend-bar { padding: 10px 16px; }
+}
+</style>
+</head>
+<body>
+
+<div class="cover">
+    <div class="cover-left">
+        <img src="LAUSD_seal.svg" class="cover-seal" alt="LAUSD Seal">
+        <div class="cover-text">
+            <img src="LAUSD_wordmark_RGB.svg" class="cover-wordmark" alt="LAUSD">
+            <div class="cover-title">CTE – Linked Learning<br><span>Department Calendar</span></div>
+            <div class="cover-sub">Division of Instruction &nbsp;·&nbsp; Los Angeles Unified School District</div>
+        </div>
+    </div>
+    <div class="cover-right">
+        <div class="cover-year">2026–27</div>
+        <div class="cover-sub" style="color:rgba(255,255,255,0.45);text-align:right;margin-top:6px;">Generated June 02, 2026</div>
+    </div>
+</div>
+
+<div class="legend-bar">
+    <span class="lbl">Teams:</span>
+    <span class="leg-item">🧰 <strong>NTST</strong></span> &nbsp;·&nbsp; <span class="leg-item">🐦 <strong>CTE</strong></span> &nbsp;·&nbsp; <span class="leg-item">▶️ <strong>LL</strong></span> &nbsp;·&nbsp; <span class="leg-item">📰 <strong>DE</strong></span> &nbsp;·&nbsp; <span class="leg-item">📗 <strong>WBL</strong></span> &nbsp;·&nbsp; <span class="leg-item">💰 <strong>G&F</strong></span> &nbsp;·&nbsp; <span class="leg-item">📧 <strong>ALL TEAMS</strong></span> &nbsp;·&nbsp; <span class="leg-item">🏫 <strong>Special Projects</strong></span>
+    <span class="status-note">
+        <span class="badge confirmed">●</span> Confirmed &nbsp;
+        <span class="badge hold">◆</span> Hold
+    </span>
+</div>
+
+<div class="calendar-body">
+    
+        <div class="month-row" id="month-0">
+            <div class="month-event-col">
+                <div class="month-name-badge">JULY 2026</div>
+                <div class="event-list"><div class="evt-row"><span class="evt-day">22</span><span class="evt-pill" style="color:#444444;background:#F0F0F0;">MiSIS Tagging Training CTE-LL Staff only 📧</span></div>
+<div class="evt-row" title="Lead: KASAMANYAN, HOVIK · Final Q4 report and End of Year. Need to confirm if Clearpoint continues."><span class="evt-day">24</span><span class="evt-pill" style="color:#8A1A1A;background:#FAE6E6;"><span class="badge hold" title="Hold">◆</span>Clearpoint MOS Q4 Data &amp; 2025-26 EOY Update - DUE 💰</span></div>
+<div class="evt-row"><span class="evt-day">29–30</span><span class="evt-pill" style="color:#7A5C00;background:#FFF7E0;">Counseling PD (Completion and DE) 📰🐦▶️</span></div>
+<div class="evt-row"><span class="evt-day">31</span><span class="evt-pill" style="color:#1A4FA0;background:#EAF0FB;">New CTE Teacher Onboarding, Orientation &amp; Wellness 🧰</span></div>
+<div class="evt-row"><span class="evt-day">31</span><span class="evt-pill" style="color:#8A1A1A;background:#FAE6E6;">Strategic Goals Narrative Due 💰</span></div></div>
+            </div>
+            <div class="month-grid-col">
+                <table class="cal-grid"><thead><tr><th>S</th><th>M</th><th>T</th><th>W</th><th>Th</th><th>F</th><th>S</th></tr></thead>
+<tbody>
+<tr><td class="empty"></td><td class="empty"></td><td class="grid-day"><span class="gday">1</span></td><td class="grid-day"><span class="gday">2</span></td><td class="grid-day"><span class="gday">3</span></td><td class="grid-day"><span class="gday">4</span></td><td class="grid-day wknd"><span class="gday">5</span></td></tr>
+<tr><td class="grid-day wknd"><span class="gday">6</span></td><td class="grid-day"><span class="gday">7</span></td><td class="grid-day"><span class="gday">8</span></td><td class="grid-day"><span class="gday">9</span></td><td class="grid-day"><span class="gday">10</span></td><td class="grid-day"><span class="gday">11</span></td><td class="grid-day wknd"><span class="gday">12</span></td></tr>
+<tr><td class="grid-day wknd"><span class="gday">13</span></td><td class="grid-day"><span class="gday">14</span></td><td class="grid-day"><span class="gday">15</span></td><td class="grid-day"><span class="gday">16</span></td><td class="grid-day"><span class="gday">17</span></td><td class="grid-day"><span class="gday">18</span></td><td class="grid-day wknd"><span class="gday">19</span></td></tr>
+<tr><td class="grid-day wknd"><span class="gday">20</span></td><td class="grid-day"><span class="gday">21</span></td><td class="grid-day"><span class="gday">22</span><div class="dots"><span class="dot" style="background:#444444;"></span></div></td><td class="grid-day"><span class="gday">23</span></td><td class="grid-day"><span class="gday">24</span><div class="dots"><span class="dot" style="background:#8A1A1A;"></span></div></td><td class="grid-day"><span class="gday">25</span></td><td class="grid-day wknd"><span class="gday">26</span></td></tr>
+<tr><td class="grid-day wknd"><span class="gday">27</span></td><td class="grid-day"><span class="gday">28</span></td><td class="grid-day"><span class="gday">29</span><div class="dots"><span class="dot" style="background:#7A5C00;"></span></div></td><td class="grid-day"><span class="gday">30</span><div class="dots"><span class="dot" style="background:#7A5C00;"></span></div></td><td class="grid-day"><span class="gday">31</span><div class="dots"><span class="dot" style="background:#1A4FA0;"></span><span class="dot" style="background:#8A1A1A;"></span></div></td><td class="empty"></td><td class="empty"></td></tr>
+</tbody></table>
+            </div>
+        </div>
+
+        <div class="month-row" id="month-1">
+            <div class="month-event-col">
+                <div class="month-name-badge">AUGUST 2026</div>
+                <div class="event-list"><div class="evt-row" title="Lead: GERTNER, BEN"><span class="evt-day">3–5</span><span class="evt-pill" style="color:#1A6B1A;background:#E6F5E6;"><span class="badge hold" title="Hold">◆</span>PBL 101 Training LL &amp; GSPP ▶️</span></div>
+<div class="evt-row" title="Lead: GERTNER, BEN"><span class="evt-day">3–5</span><span class="evt-pill" style="color:#1A6B1A;background:#E6F5E6;"><span class="badge hold" title="Hold">◆</span>Linked Learning Onboarding Day 1-3 ▶️</span></div>
+<div class="evt-row" title="Lead: PURI, SEEMA · Location TBD"><span class="evt-day">6–7</span><span class="evt-pill" style="color:#7A5C00;background:#FFF7E0;">DOI CTE Teacher PD 🐦</span></div>
+<div class="evt-row" title="Lead: ELIAS, MICHELLE"><span class="evt-day">13</span><span class="evt-pill" style="color:#444444;background:#F0F0F0;">Staff Strength Training 📧</span></div>
+<div class="evt-row" title="Lead: DABAGYAN, ESTHER · 27-145"><span class="evt-day">14</span><span class="evt-pill" style="color:#1A6B1A;background:#E6F5E6;">ILT Meeting ▶️</span></div>
+<div class="evt-row" title="Lead: KASAMANYAN, HOVIK"><span class="evt-day">14</span><span class="evt-pill" style="color:#8A1A1A;background:#FAE6E6;"><span class="badge confirmed" title="Confirmed">●</span>SWP Budget Modifications Due 💰</span></div>
+<div class="evt-row"><span class="evt-day">15</span><span class="evt-pill" style="color:#8A4000;background:#FFF0E0;">New CTE Teacher &amp; Mentor PD 🏫</span></div>
+<div class="evt-row" title="Lead: Esther/Justin"><span class="evt-day">19</span><span class="evt-pill" style="color:#444444;background:#F0F0F0;">Monthly Birthday Celebration (July &amp; August) 🎂 📧</span></div>
+<div class="evt-row"><span class="evt-day">19</span><span class="evt-pill" style="color:#1A4FA0;background:#EAF0FB;">Student Career Navigation Workshop w/ Indeed 🧰</span></div>
+<div class="evt-row"><span class="evt-day">21</span><span class="evt-pill" style="color:#444444;background:#F0F0F0;">Strength Training All Teams PD 📧</span></div>
+<div class="evt-row" title="Lead: KASAMANYAN, HOVIK"><span class="evt-day">24</span><span class="evt-pill" style="color:#8A1A1A;background:#FAE6E6;"><span class="badge confirmed" title="Confirmed">●</span>GSPP Annual Project Expenditure Report 💰</span></div>
+<div class="evt-row"><span class="evt-day">24</span><span class="evt-pill" style="color:#8A4000;background:#FFF0E0;">LAUSD/EnCorps Mentor Mentee Training Program Launch (Zoom) 🏫</span></div>
+<div class="evt-row"><span class="evt-day">26</span><span class="evt-pill" style="color:#1A4FA0;background:#EAF0FB;">Standards for Career Ready Practice PBL Series 🧰</span></div>
+<div class="evt-row"><span class="evt-day">26–27</span><span class="evt-pill" style="color:#8A4000;background:#FFF0E0;">Cognitive Coaching Mentors (Days 1 &amp; 2) 🏫</span></div>
+<div class="evt-row"><span class="evt-day">27</span><span class="evt-pill" style="color:#444444;background:#F0F0F0;">All Staff Meeting #1 📧</span></div>
+<div class="evt-row" title="Lead: KASAMANYAN, HOVIK · Cancel. Grant no longer awarded to us"><span class="evt-day">28</span><span class="evt-pill" style="color:#8A1A1A;background:#FAE6E6;">CAI Quarterly Report Due 💰</span></div>
+<div class="evt-row" title="Lead: KASAMANYAN, HOVIK"><span class="evt-day">28</span><span class="evt-pill" style="color:#8A1A1A;background:#FAE6E6;"><span class="badge confirmed" title="Confirmed">●</span>SWP Quarterly Report Due 💰</span></div>
+<div class="evt-row" title="Lead: PURI, SEEMA"><span class="evt-day">29</span><span class="evt-pill" style="color:#7A5C00;background:#FFF7E0;">CTE Teacher PD 🐦</span></div>
+<div class="evt-row"><span class="evt-day">31</span><span class="evt-pill" style="color:#8A1A1A;background:#FAE6E6;">Perkins Final Claim FY25 💰</span></div>
+<div class="evt-row" title="Lead: KASAMANYAN, HOVIK"><span class="evt-day">31</span><span class="evt-pill" style="color:#8A1A1A;background:#FAE6E6;"><span class="badge confirmed" title="Confirmed">●</span>K12 SWP Pathway Coordinator work plan certified in NOVA 💰</span></div></div>
+            </div>
+            <div class="month-grid-col">
+                <table class="cal-grid"><thead><tr><th>S</th><th>M</th><th>T</th><th>W</th><th>Th</th><th>F</th><th>S</th></tr></thead>
+<tbody>
+<tr><td class="empty"></td><td class="empty"></td><td class="empty"></td><td class="empty"></td><td class="empty"></td><td class="grid-day"><span class="gday">1</span></td><td class="grid-day wknd"><span class="gday">2</span></td></tr>
+<tr><td class="grid-day wknd"><span class="gday">3</span><div class="dots"><span class="dot" style="background:#1A6B1A;"></span></div></td><td class="grid-day"><span class="gday">4</span><div class="dots"><span class="dot" style="background:#1A6B1A;"></span></div></td><td class="grid-day"><span class="gday">5</span><div class="dots"><span class="dot" style="background:#1A6B1A;"></span></div></td><td class="grid-day"><span class="gday">6</span><div class="dots"><span class="dot" style="background:#7A5C00;"></span></div></td><td class="grid-day"><span class="gday">7</span><div class="dots"><span class="dot" style="background:#7A5C00;"></span></div></td><td class="grid-day"><span class="gday">8</span></td><td class="grid-day wknd"><span class="gday">9</span></td></tr>
+<tr><td class="grid-day wknd"><span class="gday">10</span></td><td class="grid-day"><span class="gday">11</span></td><td class="grid-day"><span class="gday">12</span></td><td class="grid-day"><span class="gday">13</span><div class="dots"><span class="dot" style="background:#444444;"></span></div></td><td class="grid-day"><span class="gday">14</span><div class="dots"><span class="dot" style="background:#1A6B1A;"></span><span class="dot" style="background:#8A1A1A;"></span></div></td><td class="grid-day"><span class="gday">15</span><div class="dots"><span class="dot" style="background:#8A4000;"></span></div></td><td class="grid-day wknd"><span class="gday">16</span></td></tr>
+<tr><td class="grid-day wknd"><span class="gday">17</span></td><td class="grid-day"><span class="gday">18</span></td><td class="grid-day"><span class="gday">19</span><div class="dots"><span class="dot" style="background:#444444;"></span><span class="dot" style="background:#1A4FA0;"></span></div></td><td class="grid-day"><span class="gday">20</span></td><td class="grid-day"><span class="gday">21</span><div class="dots"><span class="dot" style="background:#444444;"></span></div></td><td class="grid-day"><span class="gday">22</span></td><td class="grid-day wknd"><span class="gday">23</span></td></tr>
+<tr><td class="grid-day wknd"><span class="gday">24</span><div class="dots"><span class="dot" style="background:#8A1A1A;"></span><span class="dot" style="background:#8A4000;"></span></div></td><td class="grid-day"><span class="gday">25</span></td><td class="grid-day"><span class="gday">26</span><div class="dots"><span class="dot" style="background:#1A4FA0;"></span><span class="dot" style="background:#8A4000;"></span></div></td><td class="grid-day"><span class="gday">27</span><div class="dots"><span class="dot" style="background:#8A4000;"></span><span class="dot" style="background:#444444;"></span></div></td><td class="grid-day"><span class="gday">28</span><div class="dots"><span class="dot" style="background:#8A1A1A;"></span></div></td><td class="grid-day"><span class="gday">29</span><div class="dots"><span class="dot" style="background:#7A5C00;"></span></div></td><td class="grid-day wknd"><span class="gday">30</span></td></tr>
+<tr><td class="grid-day wknd"><span class="gday">31</span><div class="dots"><span class="dot" style="background:#8A1A1A;"></span></div></td><td class="empty"></td><td class="empty"></td><td class="empty"></td><td class="empty"></td><td class="empty"></td><td class="empty"></td></tr>
+</tbody></table>
+            </div>
+        </div>
+
+        <div class="month-row" id="month-2">
+            <div class="month-event-col">
+                <div class="month-name-badge">SEPTEMBER 2026</div>
+                <div class="event-list"><div class="evt-row" title="Lead: KASAMANYAN, HOVIK · Rescheduled CTEIG release since RFA moved up to May."><span class="evt-day">8</span><span class="evt-pill" style="color:#8A1A1A;background:#FAE6E6;"><span class="badge hold" title="Hold">◆</span>CTEIG Rd 11 Application Due 💰</span></div>
+<div class="evt-row" title="Rescheduled from 09/07/2026 (Labor Day)"><span class="evt-day">8</span><span class="evt-pill" style="color:#8A4000;background:#FFF0E0;">Perkins Orientation Mtg 4:00-5:00 🏫</span></div>
+<div class="evt-row"><span class="evt-day">9</span><span class="evt-pill" style="color:#8A4000;background:#FFF0E0;">New CTE Teacher &amp; Mentor PD (In-Person) 🏫</span></div>
+<div class="evt-row"><span class="evt-day">9</span><span class="evt-pill" style="color:#8A4000;background:#FFF0E0;">Perkins Orientation Mtg 4:00-5:00 🏫</span></div>
+<div class="evt-row"><span class="evt-day">10</span><span class="evt-pill" style="color:#8A4000;background:#FFF0E0;">Perkins Orientation Mtg 4:00-5:00 🏫</span></div>
+<div class="evt-row" title="Lead: DABAGYAN, ESTHER · 27-145"><span class="evt-day">11</span><span class="evt-pill" style="color:#1A6B1A;background:#E6F5E6;">ILT Meeting ▶️</span></div>
+<div class="evt-row"><span class="evt-day">15</span><span class="evt-pill" style="color:#8A1A1A;background:#FAE6E6;">CTEIG Rd. 10 Board Mtg Approval 💰</span></div>
+<div class="evt-row" title="Lead: PURI, SEEMA · PMA teachers only"><span class="evt-day">16</span><span class="evt-pill" style="color:#7A5C00;background:#FFF7E0;">Pathway Connect AME PMA 🐦</span></div>
+<div class="evt-row" title="Lead: GERTNER, BEN"><span class="evt-day">17</span><span class="evt-pill" style="color:#1A6B1A;background:#E6F5E6;"><span class="badge confirmed" title="Confirmed">●</span>School Redesign Grant Demonstration Site Visit ▶️</span></div>
+<div class="evt-row" title="Lead: Michelle"><span class="evt-day">17</span><span class="evt-pill" style="color:#444444;background:#F0F0F0;">Monthly Birthday Celebration 🎂 📧</span></div>
+<div class="evt-row" title="Lead: LE, NANCY"><span class="evt-day">19</span><span class="evt-pill" style="color:#1A6B1A;background:#E6F5E6;"><span class="badge confirmed" title="Confirmed">●</span>LL Microcredential #1 ▶️</span></div>
+<div class="evt-row"><span class="evt-day">23</span><span class="evt-pill" style="color:#1A4FA0;background:#EAF0FB;">Standards for Career Ready Practice PBL Series 🧰</span></div>
+<div class="evt-row" title="Lead: GERTNER, BEN"><span class="evt-day">24</span><span class="evt-pill" style="color:#1A6B1A;background:#E6F5E6;"><span class="badge confirmed" title="Confirmed">●</span>LL Leads PD ▶️</span></div>
+<div class="evt-row"><span class="evt-day">25</span><span class="evt-pill" style="color:#6B1A8A;background:#F5E6FA;">CTE Advisor Meeting 📰</span></div>
+<div class="evt-row" title="Lead: PURI, SEEMA"><span class="evt-day">26</span><span class="evt-pill" style="color:#7A5C00;background:#FFF7E0;">CTE Teacher PD 🐦</span></div>
+<div class="evt-row"><span class="evt-day">28–29</span><span class="evt-pill" style="color:#8A4000;background:#FFF0E0;">Cognitive Coaching Mentors (Days 3 &amp; 4) 🏫</span></div>
+<div class="evt-row"><span class="evt-day">29</span><span class="evt-pill" style="color:#8A1A1A;background:#FAE6E6;">Perkins Q1 Budget Revision 💰</span></div>
+<div class="evt-row" title="Lead: KASAMANYAN, HOVIK"><span class="evt-day">29</span><span class="evt-pill" style="color:#8A1A1A;background:#FAE6E6;"><span class="badge confirmed" title="Confirmed">●</span>SWP 5 Final Report &amp; Invoice Due 💰</span></div></div>
+            </div>
+            <div class="month-grid-col">
+                <table class="cal-grid"><thead><tr><th>S</th><th>M</th><th>T</th><th>W</th><th>Th</th><th>F</th><th>S</th></tr></thead>
+<tbody>
+<tr><td class="empty"></td><td class="grid-day"><span class="gday">1</span></td><td class="grid-day"><span class="gday">2</span></td><td class="grid-day"><span class="gday">3</span></td><td class="grid-day"><span class="gday">4</span></td><td class="grid-day"><span class="gday">5</span></td><td class="grid-day wknd"><span class="gday">6</span></td></tr>
+<tr><td class="grid-day wknd"><span class="gday">7</span></td><td class="grid-day"><span class="gday">8</span><div class="dots"><span class="dot" style="background:#8A1A1A;"></span><span class="dot" style="background:#8A4000;"></span></div></td><td class="grid-day"><span class="gday">9</span><div class="dots"><span class="dot" style="background:#8A4000;"></span></div></td><td class="grid-day"><span class="gday">10</span><div class="dots"><span class="dot" style="background:#8A4000;"></span></div></td><td class="grid-day"><span class="gday">11</span><div class="dots"><span class="dot" style="background:#1A6B1A;"></span></div></td><td class="grid-day"><span class="gday">12</span></td><td class="grid-day wknd"><span class="gday">13</span></td></tr>
+<tr><td class="grid-day wknd"><span class="gday">14</span></td><td class="grid-day"><span class="gday">15</span><div class="dots"><span class="dot" style="background:#8A1A1A;"></span></div></td><td class="grid-day"><span class="gday">16</span><div class="dots"><span class="dot" style="background:#7A5C00;"></span></div></td><td class="grid-day"><span class="gday">17</span><div class="dots"><span class="dot" style="background:#1A6B1A;"></span><span class="dot" style="background:#444444;"></span></div></td><td class="grid-day"><span class="gday">18</span></td><td class="grid-day"><span class="gday">19</span><div class="dots"><span class="dot" style="background:#1A6B1A;"></span></div></td><td class="grid-day wknd"><span class="gday">20</span></td></tr>
+<tr><td class="grid-day wknd"><span class="gday">21</span></td><td class="grid-day"><span class="gday">22</span></td><td class="grid-day"><span class="gday">23</span><div class="dots"><span class="dot" style="background:#1A4FA0;"></span></div></td><td class="grid-day"><span class="gday">24</span><div class="dots"><span class="dot" style="background:#1A6B1A;"></span></div></td><td class="grid-day"><span class="gday">25</span><div class="dots"><span class="dot" style="background:#6B1A8A;"></span></div></td><td class="grid-day"><span class="gday">26</span><div class="dots"><span class="dot" style="background:#7A5C00;"></span></div></td><td class="grid-day wknd"><span class="gday">27</span></td></tr>
+<tr><td class="grid-day wknd"><span class="gday">28</span><div class="dots"><span class="dot" style="background:#8A4000;"></span></div></td><td class="grid-day"><span class="gday">29</span><div class="dots"><span class="dot" style="background:#8A4000;"></span><span class="dot" style="background:#8A1A1A;"></span></div></td><td class="grid-day"><span class="gday">30</span></td><td class="empty"></td><td class="empty"></td><td class="empty"></td><td class="empty"></td></tr>
+</tbody></table>
+            </div>
+        </div>
+
+        <div class="month-row" id="month-3">
+            <div class="month-event-col">
+                <div class="month-name-badge">OCTOBER 2026</div>
+                <div class="event-list"><div class="evt-row"><span class="evt-day">1</span><span class="evt-pill" style="color:#0A6060;background:#E0F5F5;"><span class="badge confirmed" title="Confirmed">●</span>Work Readiness Training 101 8:30-3:30 pm 📗</span></div>
+<div class="evt-row" title="Lead: DABAGYAN, ESTHER · 27-145"><span class="evt-day">2</span><span class="evt-pill" style="color:#1A6B1A;background:#E6F5E6;">ILT Meeting ▶️</span></div>
+<div class="evt-row" title="Lead: PRICE, TOMOKO"><span class="evt-day">3</span><span class="evt-pill" style="color:#8A4000;background:#FFF0E0;"><span class="badge hold" title="Hold">◆</span>MVP College Day 🏫</span></div>
+<div class="evt-row"><span class="evt-day">5–7</span><span class="evt-pill" style="color:#444444;background:#F0F0F0;">MiSIS Tagging School Training 📧</span></div>
+<div class="evt-row" title="Lead: KASAMANYAN, HOVIK"><span class="evt-day">9</span><span class="evt-pill" style="color:#8A1A1A;background:#FAE6E6;"><span class="badge hold" title="Hold">◆</span>K12-SWP Applications Due 💰</span></div>
+<div class="evt-row"><span class="evt-day">10</span><span class="evt-pill" style="color:#0A6060;background:#E0F5F5;"><span class="badge confirmed" title="Confirmed">●</span>Work Readiness Training 201 (virtual) 9:00-12:00 pm 📗</span></div>
+<div class="evt-row" title="Lead: Nancy/Tomoko DE"><span class="evt-day">14</span><span class="evt-pill" style="color:#444444;background:#F0F0F0;">Monthly Birthday Celebration 🎂 📧</span></div>
+<div class="evt-row"><span class="evt-day">15</span><span class="evt-pill" style="color:#0A6060;background:#E0F5F5;"><span class="badge confirmed" title="Confirmed">●</span>Work Readiness Training 101 8:30-3:30 pm 📗</span></div>
+<div class="evt-row"><span class="evt-day">15</span><span class="evt-pill" style="color:#6B1A8A;background:#F5E6FA;">CTE Advisor Meeting 📰</span></div>
+<div class="evt-row" title="Lead: PURI, SEEMA"><span class="evt-day">17</span><span class="evt-pill" style="color:#7A5C00;background:#FFF7E0;">CTE Teacher PD 🐦</span></div>
+<div class="evt-row" title="Lead: PURI, SEEMA · DVMA teachers only"><span class="evt-day">21</span><span class="evt-pill" style="color:#7A5C00;background:#FFF7E0;">Pathway Connect AME DVMA 🐦</span></div>
+<div class="evt-row"><span class="evt-day">21</span><span class="evt-pill" style="color:#1A4FA0;background:#EAF0FB;">Standards for Career Ready Practice PBL Series 🧰</span></div>
+<div class="evt-row" title="Lead: GERTNER, BEN · Approval of conference attendance is pending lifting of travel moratorium"><span class="evt-day">21–23</span><span class="evt-pill" style="color:#1A6B1A;background:#E6F5E6;">LL Conference ▶️</span></div>
+<div class="evt-row" title="Lead: ELIAS, MICHELLE · Annual field trip"><span class="evt-day">22</span><span class="evt-pill" style="color:#0A6060;background:#E0F5F5;">VNY Airport Career Day 📗</span></div>
+<div class="evt-row" title="Lead: DABAGYAN, ESTHER · 27-145"><span class="evt-day">23</span><span class="evt-pill" style="color:#1A6B1A;background:#E6F5E6;">ILT Meeting ▶️</span></div>
+<div class="evt-row" title="Lead: KASAMANYAN, HOVIK · Need to confirm if Clearpoint continues."><span class="evt-day">24</span><span class="evt-pill" style="color:#8A1A1A;background:#FAE6E6;">Clearpoint MOS Q1 Data Due 💰</span></div>
+<div class="evt-row" title="Lead: GERTNER, BEN"><span class="evt-day">29</span><span class="evt-pill" style="color:#1A6B1A;background:#E6F5E6;"><span class="badge confirmed" title="Confirmed">●</span>LL Leads PD ▶️</span></div>
+<div class="evt-row" title="Lead: ELIAS, MICHELLE · Annual field trip"><span class="evt-day">29</span><span class="evt-pill" style="color:#0A6060;background:#E0F5F5;">LAX Airport Career Day 📗</span></div>
+<div class="evt-row"><span class="evt-day">29</span><span class="evt-pill" style="color:#8A1A1A;background:#FAE6E6;">Perkins Q1 Claim 💰</span></div>
+<div class="evt-row" title="Lead: KASAMANYAN, HOVIK"><span class="evt-day">31</span><span class="evt-pill" style="color:#8A1A1A;background:#FAE6E6;"><span class="badge confirmed" title="Confirmed">●</span>CalPass+ Data Reports Due 💰</span></div>
+<div class="evt-row"><span class="evt-day">31</span><span class="evt-pill" style="color:#0A6060;background:#E0F5F5;"><span class="badge confirmed" title="Confirmed">●</span>Work Readiness Training 201 (virtual) 9:00-12:00 pm 📗</span></div></div>
+            </div>
+            <div class="month-grid-col">
+                <table class="cal-grid"><thead><tr><th>S</th><th>M</th><th>T</th><th>W</th><th>Th</th><th>F</th><th>S</th></tr></thead>
+<tbody>
+<tr><td class="empty"></td><td class="empty"></td><td class="empty"></td><td class="grid-day"><span class="gday">1</span><div class="dots"><span class="dot" style="background:#0A6060;"></span></div></td><td class="grid-day"><span class="gday">2</span><div class="dots"><span class="dot" style="background:#1A6B1A;"></span></div></td><td class="grid-day"><span class="gday">3</span><div class="dots"><span class="dot" style="background:#8A4000;"></span></div></td><td class="grid-day wknd"><span class="gday">4</span></td></tr>
+<tr><td class="grid-day wknd"><span class="gday">5</span><div class="dots"><span class="dot" style="background:#444444;"></span></div></td><td class="grid-day"><span class="gday">6</span><div class="dots"><span class="dot" style="background:#444444;"></span></div></td><td class="grid-day"><span class="gday">7</span><div class="dots"><span class="dot" style="background:#444444;"></span></div></td><td class="grid-day"><span class="gday">8</span></td><td class="grid-day"><span class="gday">9</span><div class="dots"><span class="dot" style="background:#8A1A1A;"></span></div></td><td class="grid-day"><span class="gday">10</span><div class="dots"><span class="dot" style="background:#0A6060;"></span></div></td><td class="grid-day wknd"><span class="gday">11</span></td></tr>
+<tr><td class="grid-day wknd"><span class="gday">12</span></td><td class="grid-day"><span class="gday">13</span></td><td class="grid-day"><span class="gday">14</span><div class="dots"><span class="dot" style="background:#444444;"></span></div></td><td class="grid-day"><span class="gday">15</span><div class="dots"><span class="dot" style="background:#0A6060;"></span><span class="dot" style="background:#6B1A8A;"></span></div></td><td class="grid-day"><span class="gday">16</span></td><td class="grid-day"><span class="gday">17</span><div class="dots"><span class="dot" style="background:#7A5C00;"></span></div></td><td class="grid-day wknd"><span class="gday">18</span></td></tr>
+<tr><td class="grid-day wknd"><span class="gday">19</span></td><td class="grid-day"><span class="gday">20</span></td><td class="grid-day"><span class="gday">21</span><div class="dots"><span class="dot" style="background:#7A5C00;"></span><span class="dot" style="background:#1A4FA0;"></span><span class="dot" style="background:#1A6B1A;"></span></div></td><td class="grid-day"><span class="gday">22</span><div class="dots"><span class="dot" style="background:#1A6B1A;"></span><span class="dot" style="background:#0A6060;"></span></div></td><td class="grid-day"><span class="gday">23</span><div class="dots"><span class="dot" style="background:#1A6B1A;"></span></div></td><td class="grid-day"><span class="gday">24</span><div class="dots"><span class="dot" style="background:#8A1A1A;"></span></div></td><td class="grid-day wknd"><span class="gday">25</span></td></tr>
+<tr><td class="grid-day wknd"><span class="gday">26</span></td><td class="grid-day"><span class="gday">27</span></td><td class="grid-day"><span class="gday">28</span></td><td class="grid-day"><span class="gday">29</span><div class="dots"><span class="dot" style="background:#1A6B1A;"></span><span class="dot" style="background:#0A6060;"></span><span class="dot" style="background:#8A1A1A;"></span></div></td><td class="grid-day"><span class="gday">30</span></td><td class="grid-day"><span class="gday">31</span><div class="dots"><span class="dot" style="background:#8A1A1A;"></span><span class="dot" style="background:#0A6060;"></span></div></td><td class="empty"></td></tr>
+</tbody></table>
+            </div>
+        </div>
+
+        <div class="month-row" id="month-4">
+            <div class="month-event-col">
+                <div class="month-name-badge">NOVEMBER 2026</div>
+                <div class="event-list"><div class="evt-row" title="Lead: PRICE, TOMOKO"><span class="evt-day">1</span><span class="evt-pill" style="color:#8A4000;background:#FFF0E0;">LAMC 3rd CTE Symposium 🏫</span></div>
+<div class="evt-row"><span class="evt-day">4</span><span class="evt-pill" style="color:#1A4FA0;background:#EAF0FB;">CSUN/LAUSD HSMT Symposium (Region North - Patient Care) 🧰</span></div>
+<div class="evt-row"><span class="evt-day">4</span><span class="evt-pill" style="color:#1A4FA0;background:#EAF0FB;">PBL Connect follow-up PD 🧰</span></div>
+<div class="evt-row"><span class="evt-day">4–5</span><span class="evt-pill" style="color:#8A4000;background:#FFF0E0;">Cognitive Coaching Mentors (Days 5 &amp; 6) 🏫</span></div>
+<div class="evt-row"><span class="evt-day">7</span><span class="evt-pill" style="color:#0A6060;background:#E0F5F5;"><span class="badge confirmed" title="Confirmed">●</span>Work Readiness Training 101 8:30-3:30 pm 📗</span></div>
+<div class="evt-row"><span class="evt-day">7</span><span class="evt-pill" style="color:#1A6B1A;background:#E6F5E6;"><span class="badge confirmed" title="Confirmed">●</span>LL Microcredential #2 ▶️</span></div>
+<div class="evt-row"><span class="evt-day">7</span><span class="evt-pill" style="color:#8A4000;background:#FFF0E0;">New CTE Teacher &amp; Mentor PD (virtual) 🏫</span></div>
+<div class="evt-row" title="Lead: Ben · Rescheduled from 11/11/2026 (Veterans Day)"><span class="evt-day">12</span><span class="evt-pill" style="color:#444444;background:#F0F0F0;">Monthly Birthday Celebration 🎂 📧</span></div>
+<div class="evt-row" title="Lead: DABAGYAN, ESTHER · 27-145"><span class="evt-day">13</span><span class="evt-pill" style="color:#1A6B1A;background:#E6F5E6;">ILT Meeting ▶️</span></div>
+<div class="evt-row" title="Lead: PURI, SEEMA"><span class="evt-day">14</span><span class="evt-pill" style="color:#7A5C00;background:#FFF7E0;">CTE Teacher PD 🐦</span></div>
+<div class="evt-row" title="Lead: PURI, SEEMA · Performing Arts teachers only"><span class="evt-day">18</span><span class="evt-pill" style="color:#7A5C00;background:#FFF7E0;">Pathway Connect PerfArts 🐦</span></div>
+<div class="evt-row"><span class="evt-day">18</span><span class="evt-pill" style="color:#1A4FA0;background:#EAF0FB;">Standards for Career Ready Practice PBL Series 🧰</span></div>
+<div class="evt-row"><span class="evt-day">18–20</span><span class="evt-pill" style="color:#6B1A8A;background:#F5E6FA;">CTE Conference 📰</span></div>
+<div class="evt-row"><span class="evt-day">19</span><span class="evt-pill" style="color:#1A6B1A;background:#E6F5E6;">School Redesign Grant Demonstration Site Visit ▶️</span></div>
+<div class="evt-row"><span class="evt-day">30</span><span class="evt-pill" style="color:#8A4000;background:#FFF0E0;">Post Secondary Surveys Start 🏫</span></div></div>
+            </div>
+            <div class="month-grid-col">
+                <table class="cal-grid"><thead><tr><th>S</th><th>M</th><th>T</th><th>W</th><th>Th</th><th>F</th><th>S</th></tr></thead>
+<tbody>
+<tr><td class="empty"></td><td class="empty"></td><td class="empty"></td><td class="empty"></td><td class="empty"></td><td class="empty"></td><td class="grid-day wknd"><span class="gday">1</span><div class="dots"><span class="dot" style="background:#8A4000;"></span></div></td></tr>
+<tr><td class="grid-day wknd"><span class="gday">2</span></td><td class="grid-day"><span class="gday">3</span></td><td class="grid-day"><span class="gday">4</span><div class="dots"><span class="dot" style="background:#1A4FA0;"></span><span class="dot" style="background:#8A4000;"></span></div></td><td class="grid-day"><span class="gday">5</span><div class="dots"><span class="dot" style="background:#8A4000;"></span></div></td><td class="grid-day"><span class="gday">6</span></td><td class="grid-day"><span class="gday">7</span><div class="dots"><span class="dot" style="background:#0A6060;"></span><span class="dot" style="background:#1A6B1A;"></span><span class="dot" style="background:#8A4000;"></span></div></td><td class="grid-day wknd"><span class="gday">8</span></td></tr>
+<tr><td class="grid-day wknd"><span class="gday">9</span></td><td class="grid-day"><span class="gday">10</span></td><td class="grid-day"><span class="gday">11</span></td><td class="grid-day"><span class="gday">12</span><div class="dots"><span class="dot" style="background:#444444;"></span></div></td><td class="grid-day"><span class="gday">13</span><div class="dots"><span class="dot" style="background:#1A6B1A;"></span></div></td><td class="grid-day"><span class="gday">14</span><div class="dots"><span class="dot" style="background:#7A5C00;"></span></div></td><td class="grid-day wknd"><span class="gday">15</span></td></tr>
+<tr><td class="grid-day wknd"><span class="gday">16</span></td><td class="grid-day"><span class="gday">17</span></td><td class="grid-day"><span class="gday">18</span><div class="dots"><span class="dot" style="background:#7A5C00;"></span><span class="dot" style="background:#1A4FA0;"></span><span class="dot" style="background:#6B1A8A;"></span></div></td><td class="grid-day"><span class="gday">19</span><div class="dots"><span class="dot" style="background:#6B1A8A;"></span><span class="dot" style="background:#1A6B1A;"></span></div></td><td class="grid-day"><span class="gday">20</span><div class="dots"><span class="dot" style="background:#6B1A8A;"></span></div></td><td class="grid-day"><span class="gday">21</span></td><td class="grid-day wknd"><span class="gday">22</span></td></tr>
+<tr><td class="grid-day wknd"><span class="gday">23</span></td><td class="grid-day"><span class="gday">24</span></td><td class="grid-day"><span class="gday">25</span></td><td class="grid-day"><span class="gday">26</span></td><td class="grid-day"><span class="gday">27</span></td><td class="grid-day"><span class="gday">28</span></td><td class="grid-day wknd"><span class="gday">29</span></td></tr>
+<tr><td class="grid-day wknd"><span class="gday">30</span><div class="dots"><span class="dot" style="background:#8A4000;"></span></div></td><td class="empty"></td><td class="empty"></td><td class="empty"></td><td class="empty"></td><td class="empty"></td><td class="empty"></td></tr>
+</tbody></table>
+            </div>
+        </div>
+
+        <div class="month-row" id="month-5">
+            <div class="month-event-col">
+                <div class="month-name-badge">DECEMBER 2026</div>
+                <div class="event-list"><div class="evt-row"><span class="evt-day">1</span><span class="evt-pill" style="color:#444444;background:#F0F0F0;">Mock Interviews 📧</span></div>
+<div class="evt-row"><span class="evt-day">2–3</span><span class="evt-pill" style="color:#8A4000;background:#FFF0E0;">Cognitive Coaching Mentors (Days 7 &amp; 8) 🏫</span></div>
+<div class="evt-row" title="Lead: DABAGYAN, ESTHER · 27-145"><span class="evt-day">4</span><span class="evt-pill" style="color:#1A6B1A;background:#E6F5E6;">ILT Meeting ▶️</span></div>
+<div class="evt-row"><span class="evt-day">7</span><span class="evt-pill" style="color:#444444;background:#F0F0F0;">MiSIS Tagging Refresher 📧</span></div>
+<div class="evt-row" title="Lead: Judy"><span class="evt-day">9</span><span class="evt-pill" style="color:#444444;background:#F0F0F0;">Monthly Birthday Celebration 🎂 📧</span></div>
+<div class="evt-row"><span class="evt-day">9</span><span class="evt-pill" style="color:#1A4FA0;background:#EAF0FB;">Standards for Career Ready Practice PBL Series 🧰</span></div>
+<div class="evt-row"><span class="evt-day">9–10</span><span class="evt-pill" style="color:#8A4000;background:#FFF0E0;">Cognitive Coaching Mentors (Days 5 &amp; 6) 🏫</span></div>
+<div class="evt-row"><span class="evt-day">11</span><span class="evt-pill" style="color:#1A4FA0;background:#EAF0FB;">LAUSD/CSUN Healthcare Symposium (Patient Care) - Teacher Summit (TENTATIVE) 🧰</span></div>
+<div class="evt-row" title="Lead: PURI, SEEMA"><span class="evt-day">12</span><span class="evt-pill" style="color:#7A5C00;background:#FFF7E0;">CTE Teacher PD 🐦</span></div>
+<div class="evt-row"><span class="evt-day">16</span><span class="evt-pill" style="color:#444444;background:#F0F0F0;">CTE-LL All Staff #2 📧</span></div>
+<div class="evt-row"><span class="evt-day">18</span><span class="evt-pill" style="color:#8A1A1A;background:#FAE6E6;">Perkins Q2 Budget Revision 💰</span></div></div>
+            </div>
+            <div class="month-grid-col">
+                <table class="cal-grid"><thead><tr><th>S</th><th>M</th><th>T</th><th>W</th><th>Th</th><th>F</th><th>S</th></tr></thead>
+<tbody>
+<tr><td class="empty"></td><td class="grid-day"><span class="gday">1</span><div class="dots"><span class="dot" style="background:#444444;"></span></div></td><td class="grid-day"><span class="gday">2</span><div class="dots"><span class="dot" style="background:#8A4000;"></span></div></td><td class="grid-day"><span class="gday">3</span><div class="dots"><span class="dot" style="background:#8A4000;"></span></div></td><td class="grid-day"><span class="gday">4</span><div class="dots"><span class="dot" style="background:#1A6B1A;"></span></div></td><td class="grid-day"><span class="gday">5</span></td><td class="grid-day wknd"><span class="gday">6</span></td></tr>
+<tr><td class="grid-day wknd"><span class="gday">7</span><div class="dots"><span class="dot" style="background:#444444;"></span></div></td><td class="grid-day"><span class="gday">8</span></td><td class="grid-day"><span class="gday">9</span><div class="dots"><span class="dot" style="background:#444444;"></span><span class="dot" style="background:#1A4FA0;"></span><span class="dot" style="background:#8A4000;"></span></div></td><td class="grid-day"><span class="gday">10</span><div class="dots"><span class="dot" style="background:#8A4000;"></span></div></td><td class="grid-day"><span class="gday">11</span><div class="dots"><span class="dot" style="background:#1A4FA0;"></span></div></td><td class="grid-day"><span class="gday">12</span><div class="dots"><span class="dot" style="background:#7A5C00;"></span></div></td><td class="grid-day wknd"><span class="gday">13</span></td></tr>
+<tr><td class="grid-day wknd"><span class="gday">14</span></td><td class="grid-day"><span class="gday">15</span></td><td class="grid-day"><span class="gday">16</span><div class="dots"><span class="dot" style="background:#444444;"></span></div></td><td class="grid-day"><span class="gday">17</span></td><td class="grid-day"><span class="gday">18</span><div class="dots"><span class="dot" style="background:#8A1A1A;"></span></div></td><td class="grid-day"><span class="gday">19</span></td><td class="grid-day wknd"><span class="gday">20</span></td></tr>
+<tr><td class="grid-day wknd"><span class="gday">21</span></td><td class="grid-day"><span class="gday">22</span></td><td class="grid-day"><span class="gday">23</span></td><td class="grid-day"><span class="gday">24</span></td><td class="grid-day"><span class="gday">25</span></td><td class="grid-day"><span class="gday">26</span></td><td class="grid-day wknd"><span class="gday">27</span></td></tr>
+<tr><td class="grid-day wknd"><span class="gday">28</span></td><td class="grid-day"><span class="gday">29</span></td><td class="grid-day"><span class="gday">30</span></td><td class="grid-day"><span class="gday">31</span></td><td class="empty"></td><td class="empty"></td><td class="empty"></td></tr>
+</tbody></table>
+            </div>
+        </div>
+
+        <div class="month-row" id="month-6">
+            <div class="month-event-col">
+                <div class="month-name-badge">JANUARY 2027</div>
+                <div class="event-list"><div class="evt-row" title="Lead: DABAGYAN, ESTHER · 27-145"><span class="evt-day">15</span><span class="evt-pill" style="color:#1A6B1A;background:#E6F5E6;">ILT Meeting ▶️</span></div>
+<div class="evt-row" title="Lead: Esther/Justin"><span class="evt-day">20</span><span class="evt-pill" style="color:#444444;background:#F0F0F0;">Monthly Birthday Celebration 🎂 📧</span></div>
+<div class="evt-row" title="Lead: PURI, SEEMA"><span class="evt-day">23</span><span class="evt-pill" style="color:#7A5C00;background:#FFF7E0;">CTE Teacher PD 🐦</span></div>
+<div class="evt-row"><span class="evt-day">23</span><span class="evt-pill" style="color:#1A6B1A;background:#E6F5E6;"><span class="badge confirmed" title="Confirmed">●</span>LL Microcredential #3 ▶️</span></div>
+<div class="evt-row" title="Lead: KASAMANYAN, HOVIK · Need to confirm if Clearpoint continues."><span class="evt-day">24</span><span class="evt-pill" style="color:#8A1A1A;background:#FAE6E6;">Clearpoint MOS Q2 Data Due 💰</span></div>
+<div class="evt-row"><span class="evt-day">27</span><span class="evt-pill" style="color:#1A4FA0;background:#EAF0FB;">Standards for Career Ready Practice PBL Series 🧰</span></div>
+<div class="evt-row" title="Lead: GERTNER, BEN"><span class="evt-day">28</span><span class="evt-pill" style="color:#1A6B1A;background:#E6F5E6;"><span class="badge confirmed" title="Confirmed">●</span>LL Leads PD ▶️</span></div>
+<div class="evt-row" title="Lead: KASAMANYAN, HOVIK · Budget development deadline moved up to Jan"><span class="evt-day">29</span><span class="evt-pill" style="color:#8A1A1A;background:#FAE6E6;"><span class="badge confirmed" title="Confirmed">●</span>Budget Development/Positions FY27 💰</span></div>
+<div class="evt-row" title="Lead: KASAMANYAN, HOVIK"><span class="evt-day">30</span><span class="evt-pill" style="color:#8A1A1A;background:#FAE6E6;"><span class="badge confirmed" title="Confirmed">●</span>Final CTEIG Expenditure Rpt Due 💰</span></div>
+<div class="evt-row"><span class="evt-day">30</span><span class="evt-pill" style="color:#8A1A1A;background:#FAE6E6;">Perkins Q2 Claim 💰</span></div></div>
+            </div>
+            <div class="month-grid-col">
+                <table class="cal-grid"><thead><tr><th>S</th><th>M</th><th>T</th><th>W</th><th>Th</th><th>F</th><th>S</th></tr></thead>
+<tbody>
+<tr><td class="empty"></td><td class="empty"></td><td class="empty"></td><td class="empty"></td><td class="grid-day"><span class="gday">1</span></td><td class="grid-day"><span class="gday">2</span></td><td class="grid-day wknd"><span class="gday">3</span></td></tr>
+<tr><td class="grid-day wknd"><span class="gday">4</span></td><td class="grid-day"><span class="gday">5</span></td><td class="grid-day"><span class="gday">6</span></td><td class="grid-day"><span class="gday">7</span></td><td class="grid-day"><span class="gday">8</span></td><td class="grid-day"><span class="gday">9</span></td><td class="grid-day wknd"><span class="gday">10</span></td></tr>
+<tr><td class="grid-day wknd"><span class="gday">11</span></td><td class="grid-day"><span class="gday">12</span></td><td class="grid-day"><span class="gday">13</span></td><td class="grid-day"><span class="gday">14</span></td><td class="grid-day"><span class="gday">15</span><div class="dots"><span class="dot" style="background:#1A6B1A;"></span></div></td><td class="grid-day"><span class="gday">16</span></td><td class="grid-day wknd"><span class="gday">17</span></td></tr>
+<tr><td class="grid-day wknd"><span class="gday">18</span></td><td class="grid-day"><span class="gday">19</span></td><td class="grid-day"><span class="gday">20</span><div class="dots"><span class="dot" style="background:#444444;"></span></div></td><td class="grid-day"><span class="gday">21</span></td><td class="grid-day"><span class="gday">22</span></td><td class="grid-day"><span class="gday">23</span><div class="dots"><span class="dot" style="background:#7A5C00;"></span><span class="dot" style="background:#1A6B1A;"></span></div></td><td class="grid-day wknd"><span class="gday">24</span><div class="dots"><span class="dot" style="background:#8A1A1A;"></span></div></td></tr>
+<tr><td class="grid-day wknd"><span class="gday">25</span></td><td class="grid-day"><span class="gday">26</span></td><td class="grid-day"><span class="gday">27</span><div class="dots"><span class="dot" style="background:#1A4FA0;"></span></div></td><td class="grid-day"><span class="gday">28</span><div class="dots"><span class="dot" style="background:#1A6B1A;"></span></div></td><td class="grid-day"><span class="gday">29</span><div class="dots"><span class="dot" style="background:#8A1A1A;"></span></div></td><td class="grid-day"><span class="gday">30</span><div class="dots"><span class="dot" style="background:#8A1A1A;"></span></div></td><td class="grid-day wknd"><span class="gday">31</span></td></tr>
+</tbody></table>
+            </div>
+        </div>
+
+        <div class="month-row" id="month-7">
+            <div class="month-event-col">
+                <div class="month-name-badge">FEBRUARY 2027</div>
+                <div class="event-list"><div class="evt-row"><span class="evt-day">2</span><span class="evt-pill" style="color:#444444;background:#F0F0F0;">Mock Interviews 📧</span></div>
+<div class="evt-row" title="Lead: DABAGYAN, ESTHER · 27-145"><span class="evt-day">5</span><span class="evt-pill" style="color:#1A6B1A;background:#E6F5E6;">ILT Meeting ▶️</span></div>
+<div class="evt-row"><span class="evt-day">5</span><span class="evt-pill" style="color:#444444;background:#F0F0F0;">CTE-LL All Staff 3 📧</span></div>
+<div class="evt-row" title="Lead: PURI, SEEMA · HSMT Biotech teachers only"><span class="evt-day">10</span><span class="evt-pill" style="color:#7A5C00;background:#FFF7E0;">Pathway Connect - HSMT Biotech 🐦</span></div>
+<div class="evt-row" title="Lead: Donna"><span class="evt-day">10</span><span class="evt-pill" style="color:#444444;background:#F0F0F0;">Monthly Birthday Celebration 🎂 📧</span></div>
+<div class="evt-row" title="Lead: KASAMANYAN, HOVIK"><span class="evt-day">12</span><span class="evt-pill" style="color:#8A1A1A;background:#FAE6E6;"><span class="badge confirmed" title="Confirmed">●</span>SWP Budget Modifications Due 💰</span></div>
+<div class="evt-row"><span class="evt-day">18</span><span class="evt-pill" style="color:#7A5C00;background:#FFF7E0;">Pathway Connect - E-sports 🐦</span></div>
+<div class="evt-row" title="Lead: PURI, SEEMA"><span class="evt-day">20</span><span class="evt-pill" style="color:#7A5C00;background:#FFF7E0;">CTE Teacher PD 🐦</span></div>
+<div class="evt-row"><span class="evt-day">24</span><span class="evt-pill" style="color:#1A4FA0;background:#EAF0FB;">Standards for Career Ready Practice PBL Series 🧰</span></div>
+<div class="evt-row" title="Lead: GERTNER, BEN"><span class="evt-day">25</span><span class="evt-pill" style="color:#1A6B1A;background:#E6F5E6;"><span class="badge confirmed" title="Confirmed">●</span>LL Leads PD ▶️</span></div>
+<div class="evt-row"><span class="evt-day">26</span><span class="evt-pill" style="color:#1A4FA0;background:#EAF0FB;">LAUSD/CSUN Healthcare Symposium (All Regions - Biotech &amp; Mental Health) - TENTATIVE 🧰</span></div>
+<div class="evt-row"><span class="evt-day">27</span><span class="evt-pill" style="color:#8A1A1A;background:#FAE6E6;">Postsecondary Data Due 💰</span></div>
+<div class="evt-row" title="Lead: KASAMANYAN, HOVIK"><span class="evt-day">27</span><span class="evt-pill" style="color:#8A1A1A;background:#FAE6E6;"><span class="badge confirmed" title="Confirmed">●</span>SWP Quarterly Reports Due 💰</span></div>
+<div class="evt-row"><span class="evt-day">28/2–2/3</span><span class="evt-pill" style="color:#6B1A8A;background:#F5E6FA;">Educating for Careers Conference 📰</span></div></div>
+            </div>
+            <div class="month-grid-col">
+                <table class="cal-grid"><thead><tr><th>S</th><th>M</th><th>T</th><th>W</th><th>Th</th><th>F</th><th>S</th></tr></thead>
+<tbody>
+<tr><td class="grid-day wknd"><span class="gday">1</span></td><td class="grid-day"><span class="gday">2</span><div class="dots"><span class="dot" style="background:#444444;"></span></div></td><td class="grid-day"><span class="gday">3</span></td><td class="grid-day"><span class="gday">4</span></td><td class="grid-day"><span class="gday">5</span><div class="dots"><span class="dot" style="background:#1A6B1A;"></span><span class="dot" style="background:#444444;"></span></div></td><td class="grid-day"><span class="gday">6</span></td><td class="grid-day wknd"><span class="gday">7</span></td></tr>
+<tr><td class="grid-day wknd"><span class="gday">8</span></td><td class="grid-day"><span class="gday">9</span></td><td class="grid-day"><span class="gday">10</span><div class="dots"><span class="dot" style="background:#7A5C00;"></span><span class="dot" style="background:#444444;"></span></div></td><td class="grid-day"><span class="gday">11</span></td><td class="grid-day"><span class="gday">12</span><div class="dots"><span class="dot" style="background:#8A1A1A;"></span></div></td><td class="grid-day"><span class="gday">13</span></td><td class="grid-day wknd"><span class="gday">14</span></td></tr>
+<tr><td class="grid-day wknd"><span class="gday">15</span></td><td class="grid-day"><span class="gday">16</span></td><td class="grid-day"><span class="gday">17</span></td><td class="grid-day"><span class="gday">18</span><div class="dots"><span class="dot" style="background:#7A5C00;"></span></div></td><td class="grid-day"><span class="gday">19</span></td><td class="grid-day"><span class="gday">20</span><div class="dots"><span class="dot" style="background:#7A5C00;"></span></div></td><td class="grid-day wknd"><span class="gday">21</span></td></tr>
+<tr><td class="grid-day wknd"><span class="gday">22</span></td><td class="grid-day"><span class="gday">23</span></td><td class="grid-day"><span class="gday">24</span><div class="dots"><span class="dot" style="background:#1A4FA0;"></span></div></td><td class="grid-day"><span class="gday">25</span><div class="dots"><span class="dot" style="background:#1A6B1A;"></span></div></td><td class="grid-day"><span class="gday">26</span><div class="dots"><span class="dot" style="background:#1A4FA0;"></span></div></td><td class="grid-day"><span class="gday">27</span><div class="dots"><span class="dot" style="background:#8A1A1A;"></span></div></td><td class="grid-day wknd"><span class="gday">28</span><div class="dots"><span class="dot" style="background:#6B1A8A;"></span></div></td></tr>
+</tbody></table>
+            </div>
+        </div>
+
+        <div class="month-row" id="month-8">
+            <div class="month-event-col">
+                <div class="month-name-badge">MARCH 2027</div>
+                <div class="event-list"><div class="evt-row"><span class="evt-day">1</span><span class="evt-pill" style="color:#8A1A1A;background:#FAE6E6;">CTE Postsecondary Data Due 💰</span></div>
+<div class="evt-row"><span class="evt-day">1</span><span class="evt-pill" style="color:#8A1A1A;background:#FAE6E6;">Inventory Instructions Released 💰</span></div>
+<div class="evt-row" title="Lead: PRICE, TOMOKO"><span class="evt-day">1</span><span class="evt-pill" style="color:#8A4000;background:#FFF0E0;">LAMC Spring to STEM 🏫</span></div>
+<div class="evt-row"><span class="evt-day">2</span><span class="evt-pill" style="color:#444444;background:#F0F0F0;">Mock Interviews 📧</span></div>
+<div class="evt-row"><span class="evt-day">3</span><span class="evt-pill" style="color:#8A4000;background:#FFF0E0;">New CTE Teacher &amp; Mentor PD (In-Person) 🏫</span></div>
+<div class="evt-row" title="Lead: GERTNER, BEN"><span class="evt-day">4</span><span class="evt-pill" style="color:#1A6B1A;background:#E6F5E6;"><span class="badge confirmed" title="Confirmed">●</span>School Redesign Grant Demonstration Site Visit ▶️</span></div>
+<div class="evt-row"><span class="evt-day">4</span><span class="evt-pill" style="color:#0A6060;background:#E0F5F5;">Youth at Work: Safety Training with LOHP UC Berkeley 📗</span></div>
+<div class="evt-row" title="Lead: PRICE, TOMOKO · Need to confirm date with Counseling"><span class="evt-day">5</span><span class="evt-pill" style="color:#6B1A8A;background:#F5E6FA;"><span class="badge hold" title="Hold">◆</span>Dual Enrollment Symposium 📰</span></div>
+<div class="evt-row"><span class="evt-day">6</span><span class="evt-pill" style="color:#8A4000;background:#FFF0E0;">New CTE Teacher &amp; Mentor PD (virtual) 🏫</span></div>
+<div class="evt-row"><span class="evt-day">6</span><span class="evt-pill" style="color:#1A6B1A;background:#E6F5E6;"><span class="badge confirmed" title="Confirmed">●</span>LL Microcredential #4 ▶️</span></div>
+<div class="evt-row"><span class="evt-day">10</span><span class="evt-pill" style="color:#444444;background:#F0F0F0;">Monthly Birthday Celebration 🎂 📧</span></div>
+<div class="evt-row"><span class="evt-day">11</span><span class="evt-pill" style="color:#8A4000;background:#FFF0E0;">JA Inspire 2027 🏫</span></div>
+<div class="evt-row" title="Lead: DABAGYAN, ESTHER · 27-145"><span class="evt-day">12</span><span class="evt-pill" style="color:#1A6B1A;background:#E6F5E6;">ILT Meeting ▶️</span></div>
+<div class="evt-row"><span class="evt-day">13</span><span class="evt-pill" style="color:#7A5C00;background:#FFF7E0;">CTE Teacher Wellness Retreat 🐦</span></div>
+<div class="evt-row" title="Lead: PURI, SEEMA"><span class="evt-day">13</span><span class="evt-pill" style="color:#7A5C00;background:#FFF7E0;">CTE Teacher PD 🐦</span></div>
+<div class="evt-row" title="Lead: PURI, SEEMA · HSMT Patient Care teachers only"><span class="evt-day">17</span><span class="evt-pill" style="color:#7A5C00;background:#FFF7E0;">Pathway Connect HSMT PatCare 🐦</span></div>
+<div class="evt-row"><span class="evt-day">18</span><span class="evt-pill" style="color:#1A6B1A;background:#E6F5E6;">LL Leads PD ▶️</span></div>
+<div class="evt-row"><span class="evt-day">29</span><span class="evt-pill" style="color:#8A1A1A;background:#FAE6E6;">Perkins Q3 Budget Revision 💰</span></div>
+<div class="evt-row" title="Rescheduled from 03/23/2027 (Spring recess)"><span class="evt-day">29</span><span class="evt-pill" style="color:#8A4000;background:#FFF0E0;">CTE-Linked Learning Showcase &amp; Advisory Mtg 🏫</span></div>
+<div class="evt-row" title="Rescheduled from 03/24/2027 (Spring recess)"><span class="evt-day">29</span><span class="evt-pill" style="color:#1A4FA0;background:#EAF0FB;">Standards for Career Ready Practice PBL Series 🧰</span></div>
+<div class="evt-row"><span class="evt-day">29–30</span><span class="evt-pill" style="color:#444444;background:#F0F0F0;">Mock Interviews 📧</span></div></div>
+            </div>
+            <div class="month-grid-col">
+                <table class="cal-grid"><thead><tr><th>S</th><th>M</th><th>T</th><th>W</th><th>Th</th><th>F</th><th>S</th></tr></thead>
+<tbody>
+<tr><td class="grid-day wknd"><span class="gday">1</span><div class="dots"><span class="dot" style="background:#6B1A8A;"></span><span class="dot" style="background:#8A1A1A;"></span><span class="dot" style="background:#8A4000;"></span></div></td><td class="grid-day"><span class="gday">2</span><div class="dots"><span class="dot" style="background:#6B1A8A;"></span><span class="dot" style="background:#444444;"></span></div></td><td class="grid-day"><span class="gday">3</span><div class="dots"><span class="dot" style="background:#8A4000;"></span></div></td><td class="grid-day"><span class="gday">4</span><div class="dots"><span class="dot" style="background:#1A6B1A;"></span><span class="dot" style="background:#0A6060;"></span></div></td><td class="grid-day"><span class="gday">5</span><div class="dots"><span class="dot" style="background:#6B1A8A;"></span></div></td><td class="grid-day"><span class="gday">6</span><div class="dots"><span class="dot" style="background:#8A4000;"></span><span class="dot" style="background:#1A6B1A;"></span></div></td><td class="grid-day wknd"><span class="gday">7</span></td></tr>
+<tr><td class="grid-day wknd"><span class="gday">8</span></td><td class="grid-day"><span class="gday">9</span></td><td class="grid-day"><span class="gday">10</span><div class="dots"><span class="dot" style="background:#444444;"></span></div></td><td class="grid-day"><span class="gday">11</span><div class="dots"><span class="dot" style="background:#8A4000;"></span></div></td><td class="grid-day"><span class="gday">12</span><div class="dots"><span class="dot" style="background:#1A6B1A;"></span></div></td><td class="grid-day"><span class="gday">13</span><div class="dots"><span class="dot" style="background:#7A5C00;"></span></div></td><td class="grid-day wknd"><span class="gday">14</span></td></tr>
+<tr><td class="grid-day wknd"><span class="gday">15</span></td><td class="grid-day"><span class="gday">16</span></td><td class="grid-day"><span class="gday">17</span><div class="dots"><span class="dot" style="background:#7A5C00;"></span></div></td><td class="grid-day"><span class="gday">18</span><div class="dots"><span class="dot" style="background:#1A6B1A;"></span></div></td><td class="grid-day"><span class="gday">19</span></td><td class="grid-day"><span class="gday">20</span></td><td class="grid-day wknd"><span class="gday">21</span></td></tr>
+<tr><td class="grid-day wknd"><span class="gday">22</span></td><td class="grid-day"><span class="gday">23</span></td><td class="grid-day"><span class="gday">24</span></td><td class="grid-day"><span class="gday">25</span></td><td class="grid-day"><span class="gday">26</span></td><td class="grid-day"><span class="gday">27</span></td><td class="grid-day wknd"><span class="gday">28</span></td></tr>
+<tr><td class="grid-day wknd"><span class="gday">29</span><div class="dots"><span class="dot" style="background:#8A1A1A;"></span><span class="dot" style="background:#8A4000;"></span><span class="dot" style="background:#1A4FA0;"></span><span class="dot" style="background:#444444;"></span></div></td><td class="grid-day"><span class="gday">30</span><div class="dots"><span class="dot" style="background:#444444;"></span></div></td><td class="grid-day"><span class="gday">31</span></td><td class="empty"></td><td class="empty"></td><td class="empty"></td><td class="empty"></td></tr>
+</tbody></table>
+            </div>
+        </div>
+
+        <div class="month-row" id="month-9">
+            <div class="month-event-col">
+                <div class="month-name-badge">APRIL 2027</div>
+                <div class="event-list"><div class="evt-row" title="Lead: DABAGYAN, ESTHER · 27-145"><span class="evt-day">2</span><span class="evt-pill" style="color:#1A6B1A;background:#E6F5E6;">ILT Meeting ▶️</span></div>
+<div class="evt-row"><span class="evt-day">5</span><span class="evt-pill" style="color:#8A1A1A;background:#FAE6E6;">CTE Equipment Inventory Starts 💰</span></div>
+<div class="evt-row" title="Lead: Hovik G&amp;amp;F"><span class="evt-day">7</span><span class="evt-pill" style="color:#444444;background:#F0F0F0;">Monthly Birthday Celebration 🎂 📧</span></div>
+<div class="evt-row" title="Lead: ELIAS, MICHELLE · Annual field trip"><span class="evt-day">8</span><span class="evt-pill" style="color:#0A6060;background:#E0F5F5;">4th Annual ABOTA @ LA Superior Court 📗</span></div>
+<div class="evt-row"><span class="evt-day">12</span><span class="evt-pill" style="color:#1A4FA0;background:#EAF0FB;">Defined Learning Micro-Credential Training Kick-Off 🧰</span></div>
+<div class="evt-row"><span class="evt-day">16</span><span class="evt-pill" style="color:#8A1A1A;background:#FAE6E6;">Final Procurement Purchases 💰</span></div>
+<div class="evt-row"><span class="evt-day">16</span><span class="evt-pill" style="color:#1A4FA0;background:#EAF0FB;">LAUSD/CSUN Healthcare Teacher &amp; Faculty Summit 🧰</span></div>
+<div class="evt-row" title="Lead: PRICE, TOMOKO · CTE student field trip to ELAC. Date needs to be confirmed"><span class="evt-day">16</span><span class="evt-pill" style="color:#8A4000;background:#FFF0E0;">ELAC CTE Day 🏫</span></div>
+<div class="evt-row" title="Lead: PURI, SEEMA"><span class="evt-day">17</span><span class="evt-pill" style="color:#7A5C00;background:#FFF7E0;">CTE Teacher PD 🐦</span></div>
+<div class="evt-row"><span class="evt-day">21</span><span class="evt-pill" style="color:#1A4FA0;background:#EAF0FB;">Standards for Career Ready Practice PBL Series 🧰</span></div>
+<div class="evt-row" title="Lead: GERTNER, BEN"><span class="evt-day">22</span><span class="evt-pill" style="color:#1A6B1A;background:#E6F5E6;"><span class="badge confirmed" title="Confirmed">●</span>LL Leads PD ▶️</span></div>
+<div class="evt-row" title="Lead: LE, NANCY"><span class="evt-day">22</span><span class="evt-pill" style="color:#0A6060;background:#E0F5F5;"><span class="badge hold" title="Hold">◆</span>Educators of Tomorrow Hiring Event (to be confirmed) 📗</span></div>
+<div class="evt-row" title="Lead: DABAGYAN, ESTHER"><span class="evt-day">23</span><span class="evt-pill" style="color:#1A6B1A;background:#E6F5E6;">ILT Meeting ▶️</span></div>
+<div class="evt-row" title="Lead: KASAMANYAN, HOVIK"><span class="evt-day">24</span><span class="evt-pill" style="color:#8A1A1A;background:#FAE6E6;">Clearpoint MOS Q3 Data Due 💰</span></div>
+<div class="evt-row"><span class="evt-day">24</span><span class="evt-pill" style="color:#1A6B1A;background:#E6F5E6;"><span class="badge confirmed" title="Confirmed">●</span>LL Microcredential #5 ▶️</span></div>
+<div class="evt-row"><span class="evt-day">29</span><span class="evt-pill" style="color:#8A1A1A;background:#FAE6E6;">Perkins Q3 Claim 💰</span></div>
+<div class="evt-row" title="Lead: KASAMANYAN, HOVIK"><span class="evt-day">30</span><span class="evt-pill" style="color:#8A1A1A;background:#FAE6E6;"><span class="badge confirmed" title="Confirmed">●</span>GSPP final payment 15% 💰</span></div></div>
+            </div>
+            <div class="month-grid-col">
+                <table class="cal-grid"><thead><tr><th>S</th><th>M</th><th>T</th><th>W</th><th>Th</th><th>F</th><th>S</th></tr></thead>
+<tbody>
+<tr><td class="empty"></td><td class="empty"></td><td class="empty"></td><td class="grid-day"><span class="gday">1</span></td><td class="grid-day"><span class="gday">2</span><div class="dots"><span class="dot" style="background:#1A6B1A;"></span></div></td><td class="grid-day"><span class="gday">3</span></td><td class="grid-day wknd"><span class="gday">4</span></td></tr>
+<tr><td class="grid-day wknd"><span class="gday">5</span><div class="dots"><span class="dot" style="background:#8A1A1A;"></span></div></td><td class="grid-day"><span class="gday">6</span></td><td class="grid-day"><span class="gday">7</span><div class="dots"><span class="dot" style="background:#444444;"></span></div></td><td class="grid-day"><span class="gday">8</span><div class="dots"><span class="dot" style="background:#0A6060;"></span></div></td><td class="grid-day"><span class="gday">9</span></td><td class="grid-day"><span class="gday">10</span></td><td class="grid-day wknd"><span class="gday">11</span></td></tr>
+<tr><td class="grid-day wknd"><span class="gday">12</span><div class="dots"><span class="dot" style="background:#1A4FA0;"></span></div></td><td class="grid-day"><span class="gday">13</span></td><td class="grid-day"><span class="gday">14</span></td><td class="grid-day"><span class="gday">15</span></td><td class="grid-day"><span class="gday">16</span><div class="dots"><span class="dot" style="background:#8A1A1A;"></span><span class="dot" style="background:#1A4FA0;"></span><span class="dot" style="background:#8A4000;"></span></div></td><td class="grid-day"><span class="gday">17</span><div class="dots"><span class="dot" style="background:#7A5C00;"></span></div></td><td class="grid-day wknd"><span class="gday">18</span></td></tr>
+<tr><td class="grid-day wknd"><span class="gday">19</span></td><td class="grid-day"><span class="gday">20</span></td><td class="grid-day"><span class="gday">21</span><div class="dots"><span class="dot" style="background:#1A4FA0;"></span></div></td><td class="grid-day"><span class="gday">22</span><div class="dots"><span class="dot" style="background:#1A6B1A;"></span><span class="dot" style="background:#0A6060;"></span></div></td><td class="grid-day"><span class="gday">23</span><div class="dots"><span class="dot" style="background:#1A6B1A;"></span></div></td><td class="grid-day"><span class="gday">24</span><div class="dots"><span class="dot" style="background:#8A1A1A;"></span><span class="dot" style="background:#1A6B1A;"></span></div></td><td class="grid-day wknd"><span class="gday">25</span></td></tr>
+<tr><td class="grid-day wknd"><span class="gday">26</span></td><td class="grid-day"><span class="gday">27</span></td><td class="grid-day"><span class="gday">28</span></td><td class="grid-day"><span class="gday">29</span><div class="dots"><span class="dot" style="background:#8A1A1A;"></span></div></td><td class="grid-day"><span class="gday">30</span><div class="dots"><span class="dot" style="background:#8A1A1A;"></span></div></td><td class="empty"></td><td class="empty"></td></tr>
+</tbody></table>
+            </div>
+        </div>
+
+        <div class="month-row" id="month-10">
+            <div class="month-event-col">
+                <div class="month-name-badge">MAY 2027</div>
+                <div class="event-list"><div class="evt-row"><span class="evt-day">4</span><span class="evt-pill" style="color:#444444;background:#F0F0F0;">Mock Interviews 📧</span></div>
+<div class="evt-row"><span class="evt-day">7</span><span class="evt-pill" style="color:#1A4FA0;background:#EAF0FB;">Defined Learning Micro-Credential Training 🧰</span></div>
+<div class="evt-row" title="Lead: Seema"><span class="evt-day">12</span><span class="evt-pill" style="color:#444444;background:#F0F0F0;">Monthly Birthday Celebration 🎂 📧</span></div>
+<div class="evt-row" title="Lead: DABAGYAN, ESTHER · 27-145"><span class="evt-day">14</span><span class="evt-pill" style="color:#1A6B1A;background:#E6F5E6;">ILT Meeting ▶️</span></div>
+<div class="evt-row" title="Lead: PURI, SEEMA"><span class="evt-day">15</span><span class="evt-pill" style="color:#7A5C00;background:#FFF7E0;">CTE Teacher PD 🐦</span></div>
+<div class="evt-row"><span class="evt-day">19</span><span class="evt-pill" style="color:#8A1A1A;background:#FAE6E6;">GSPP Annual Data Due 💰</span></div>
+<div class="evt-row"><span class="evt-day">26</span><span class="evt-pill" style="color:#1A4FA0;background:#EAF0FB;">Standards for Career Ready Practice PBL Series Culmination 🧰</span></div>
+<div class="evt-row"><span class="evt-day">28</span><span class="evt-pill" style="color:#1A4FA0;background:#EAF0FB;">Defined Learning Micro-Credential Training 🧰</span></div>
+<div class="evt-row"><span class="evt-day">28</span><span class="evt-pill" style="color:#8A1A1A;background:#FAE6E6;">Grant Funded Inventory Due 💰</span></div>
+<div class="evt-row"><span class="evt-day">29</span><span class="evt-pill" style="color:#8A4000;background:#FFF0E0;">New CTE Teacher &amp; Mentor PD Finale (In-Person) 🏫</span></div></div>
+            </div>
+            <div class="month-grid-col">
+                <table class="cal-grid"><thead><tr><th>S</th><th>M</th><th>T</th><th>W</th><th>Th</th><th>F</th><th>S</th></tr></thead>
+<tbody>
+<tr><td class="empty"></td><td class="empty"></td><td class="empty"></td><td class="empty"></td><td class="empty"></td><td class="grid-day"><span class="gday">1</span></td><td class="grid-day wknd"><span class="gday">2</span></td></tr>
+<tr><td class="grid-day wknd"><span class="gday">3</span></td><td class="grid-day"><span class="gday">4</span><div class="dots"><span class="dot" style="background:#444444;"></span></div></td><td class="grid-day"><span class="gday">5</span></td><td class="grid-day"><span class="gday">6</span></td><td class="grid-day"><span class="gday">7</span><div class="dots"><span class="dot" style="background:#1A4FA0;"></span></div></td><td class="grid-day"><span class="gday">8</span></td><td class="grid-day wknd"><span class="gday">9</span></td></tr>
+<tr><td class="grid-day wknd"><span class="gday">10</span></td><td class="grid-day"><span class="gday">11</span></td><td class="grid-day"><span class="gday">12</span><div class="dots"><span class="dot" style="background:#444444;"></span></div></td><td class="grid-day"><span class="gday">13</span></td><td class="grid-day"><span class="gday">14</span><div class="dots"><span class="dot" style="background:#1A6B1A;"></span></div></td><td class="grid-day"><span class="gday">15</span><div class="dots"><span class="dot" style="background:#7A5C00;"></span></div></td><td class="grid-day wknd"><span class="gday">16</span></td></tr>
+<tr><td class="grid-day wknd"><span class="gday">17</span></td><td class="grid-day"><span class="gday">18</span></td><td class="grid-day"><span class="gday">19</span><div class="dots"><span class="dot" style="background:#8A1A1A;"></span></div></td><td class="grid-day"><span class="gday">20</span></td><td class="grid-day"><span class="gday">21</span></td><td class="grid-day"><span class="gday">22</span></td><td class="grid-day wknd"><span class="gday">23</span></td></tr>
+<tr><td class="grid-day wknd"><span class="gday">24</span></td><td class="grid-day"><span class="gday">25</span></td><td class="grid-day"><span class="gday">26</span><div class="dots"><span class="dot" style="background:#1A4FA0;"></span></div></td><td class="grid-day"><span class="gday">27</span></td><td class="grid-day"><span class="gday">28</span><div class="dots"><span class="dot" style="background:#1A4FA0;"></span><span class="dot" style="background:#8A1A1A;"></span></div></td><td class="grid-day"><span class="gday">29</span><div class="dots"><span class="dot" style="background:#8A4000;"></span></div></td><td class="grid-day wknd"><span class="gday">30</span></td></tr>
+<tr><td class="grid-day wknd"><span class="gday">31</span></td><td class="empty"></td><td class="empty"></td><td class="empty"></td><td class="empty"></td><td class="empty"></td><td class="empty"></td></tr>
+</tbody></table>
+            </div>
+        </div>
+
+        <div class="month-row" id="month-11">
+            <div class="month-event-col">
+                <div class="month-name-badge">JUNE 2027</div>
+                <div class="event-list"><div class="evt-row" title="Rescheduled from 05/31/2027 (Memorial Day)"><span class="evt-day">1</span><span class="evt-pill" style="color:#1A4FA0;background:#EAF0FB;">2026 Mentor-Mentee Interdisciplinary CTE Pathways Collaborative PBL Showcase 🧰</span></div>
+<div class="evt-row"><span class="evt-day">1</span><span class="evt-pill" style="color:#444444;background:#F0F0F0;">Mock Interviews 📧</span></div>
+<div class="evt-row" title="Lead: DABAGYAN, ESTHER · 27-145"><span class="evt-day">4</span><span class="evt-pill" style="color:#1A6B1A;background:#E6F5E6;">ILT Meeting ▶️</span></div>
+<div class="evt-row"><span class="evt-day">4</span><span class="evt-pill" style="color:#444444;background:#F0F0F0;">CTE-LL All Staff Meeting #4 📧</span></div>
+<div class="evt-row"><span class="evt-day">4</span><span class="evt-pill" style="color:#1A4FA0;background:#EAF0FB;">Defined Learning Micro-Credential Training 🧰</span></div>
+<div class="evt-row" title="Lead: PURI, SEEMA"><span class="evt-day">5</span><span class="evt-pill" style="color:#7A5C00;background:#FFF7E0;">CTE Teacher PD 🐦</span></div>
+<div class="evt-row"><span class="evt-day">11</span><span class="evt-pill" style="color:#1A4FA0;background:#EAF0FB;">New CTE Enrichment Day 🧰</span></div>
+<div class="evt-row" title="Lead: KASAMANYAN, HOVIK"><span class="evt-day">11</span><span class="evt-pill" style="color:#8A1A1A;background:#FAE6E6;"><span class="badge confirmed" title="Confirmed">●</span>SWP Budget Modifications Due 💰</span></div>
+<div class="evt-row"><span class="evt-day">14–16</span><span class="evt-pill" style="color:#7A5C00;background:#FFF7E0;">PBL Pilot Cohort 2 PD 🐦</span></div>
+<div class="evt-row" title="Lead: Mike Golden"><span class="evt-day">16</span><span class="evt-pill" style="color:#444444;background:#F0F0F0;">Monthly Birthday Celebration 🎂 📧</span></div>
+<div class="evt-row" title="Lead: DABAGYAN, ESTHER · 27-145"><span class="evt-day">25</span><span class="evt-pill" style="color:#1A6B1A;background:#E6F5E6;">ILT Meeting ▶️</span></div>
+<div class="evt-row"><span class="evt-day">28</span><span class="evt-pill" style="color:#1A4FA0;background:#EAF0FB;">Defined Learning Micro-Credential Training 🧰</span></div>
+<div class="evt-row"><span class="evt-day">29</span><span class="evt-pill" style="color:#6B1A8A;background:#F5E6FA;">CPA CAPAAR Reports Due 📰</span></div>
+<div class="evt-row" title="Lead: KASAMANYAN, HOVIK · Cancel - Planning Grant ended 6/30/26."><span class="evt-day">29</span><span class="evt-pill" style="color:#8A1A1A;background:#FAE6E6;">GSPP Planning Grant Ends. Supplemental Rpt (Appx E) &amp; Budget for Imp (Appx F2) Due 💰</span></div>
+<div class="evt-row"><span class="evt-day">29</span><span class="evt-pill" style="color:#8A1A1A;background:#FAE6E6;">Perkins Q4 Budget Revision 💰</span></div></div>
+            </div>
+            <div class="month-grid-col">
+                <table class="cal-grid"><thead><tr><th>S</th><th>M</th><th>T</th><th>W</th><th>Th</th><th>F</th><th>S</th></tr></thead>
+<tbody>
+<tr><td class="empty"></td><td class="grid-day"><span class="gday">1</span><div class="dots"><span class="dot" style="background:#1A4FA0;"></span><span class="dot" style="background:#444444;"></span></div></td><td class="grid-day"><span class="gday">2</span></td><td class="grid-day"><span class="gday">3</span></td><td class="grid-day"><span class="gday">4</span><div class="dots"><span class="dot" style="background:#1A6B1A;"></span><span class="dot" style="background:#444444;"></span><span class="dot" style="background:#1A4FA0;"></span></div></td><td class="grid-day"><span class="gday">5</span><div class="dots"><span class="dot" style="background:#7A5C00;"></span></div></td><td class="grid-day wknd"><span class="gday">6</span></td></tr>
+<tr><td class="grid-day wknd"><span class="gday">7</span></td><td class="grid-day"><span class="gday">8</span></td><td class="grid-day"><span class="gday">9</span></td><td class="grid-day"><span class="gday">10</span></td><td class="grid-day"><span class="gday">11</span><div class="dots"><span class="dot" style="background:#1A4FA0;"></span><span class="dot" style="background:#8A1A1A;"></span></div></td><td class="grid-day"><span class="gday">12</span></td><td class="grid-day wknd"><span class="gday">13</span></td></tr>
+<tr><td class="grid-day wknd"><span class="gday">14</span><div class="dots"><span class="dot" style="background:#7A5C00;"></span></div></td><td class="grid-day"><span class="gday">15</span><div class="dots"><span class="dot" style="background:#7A5C00;"></span></div></td><td class="grid-day"><span class="gday">16</span><div class="dots"><span class="dot" style="background:#7A5C00;"></span><span class="dot" style="background:#444444;"></span></div></td><td class="grid-day"><span class="gday">17</span></td><td class="grid-day"><span class="gday">18</span></td><td class="grid-day"><span class="gday">19</span></td><td class="grid-day wknd"><span class="gday">20</span></td></tr>
+<tr><td class="grid-day wknd"><span class="gday">21</span></td><td class="grid-day"><span class="gday">22</span></td><td class="grid-day"><span class="gday">23</span></td><td class="grid-day"><span class="gday">24</span></td><td class="grid-day"><span class="gday">25</span><div class="dots"><span class="dot" style="background:#1A6B1A;"></span></div></td><td class="grid-day"><span class="gday">26</span></td><td class="grid-day wknd"><span class="gday">27</span></td></tr>
+<tr><td class="grid-day wknd"><span class="gday">28</span><div class="dots"><span class="dot" style="background:#1A4FA0;"></span></div></td><td class="grid-day"><span class="gday">29</span><div class="dots"><span class="dot" style="background:#6B1A8A;"></span><span class="dot" style="background:#8A1A1A;"></span></div></td><td class="grid-day"><span class="gday">30</span></td><td class="empty"></td><td class="empty"></td><td class="empty"></td><td class="empty"></td></tr>
+</tbody></table>
+            </div>
+        </div>
+
+        <div class="month-row" id="month-12">
+            <div class="month-event-col">
+                <div class="month-name-badge">JULY 2027</div>
+                <div class="event-list"><div class="evt-row" title="Lead: KASAMANYAN, HOVIK"><span class="evt-day">24</span><span class="evt-pill" style="color:#8A1A1A;background:#FAE6E6;">Clearpoint MOS Q4 Data &amp; 2026-27 EOY Update - Due 💰</span></div>
+<div class="evt-row" title="Lead: KASAMANYAN, HOVIK"><span class="evt-day">29</span><span class="evt-pill" style="color:#8A1A1A;background:#FAE6E6;"><span class="badge confirmed" title="Confirmed">●</span>K12 SWP Pathway Coordinator final expenditures and year-end survey 💰</span></div>
+<div class="evt-row"><span class="evt-day">29</span><span class="evt-pill" style="color:#8A1A1A;background:#FAE6E6;">Perkins FY26 Final Claim 💰</span></div></div>
+            </div>
+            <div class="month-grid-col">
+                <table class="cal-grid"><thead><tr><th>S</th><th>M</th><th>T</th><th>W</th><th>Th</th><th>F</th><th>S</th></tr></thead>
+<tbody>
+<tr><td class="empty"></td><td class="empty"></td><td class="empty"></td><td class="grid-day"><span class="gday">1</span></td><td class="grid-day"><span class="gday">2</span></td><td class="grid-day"><span class="gday">3</span></td><td class="grid-day wknd"><span class="gday">4</span></td></tr>
+<tr><td class="grid-day wknd"><span class="gday">5</span></td><td class="grid-day"><span class="gday">6</span></td><td class="grid-day"><span class="gday">7</span></td><td class="grid-day"><span class="gday">8</span></td><td class="grid-day"><span class="gday">9</span></td><td class="grid-day"><span class="gday">10</span></td><td class="grid-day wknd"><span class="gday">11</span></td></tr>
+<tr><td class="grid-day wknd"><span class="gday">12</span></td><td class="grid-day"><span class="gday">13</span></td><td class="grid-day"><span class="gday">14</span></td><td class="grid-day"><span class="gday">15</span></td><td class="grid-day"><span class="gday">16</span></td><td class="grid-day"><span class="gday">17</span></td><td class="grid-day wknd"><span class="gday">18</span></td></tr>
+<tr><td class="grid-day wknd"><span class="gday">19</span></td><td class="grid-day"><span class="gday">20</span></td><td class="grid-day"><span class="gday">21</span></td><td class="grid-day"><span class="gday">22</span></td><td class="grid-day"><span class="gday">23</span></td><td class="grid-day"><span class="gday">24</span><div class="dots"><span class="dot" style="background:#8A1A1A;"></span></div></td><td class="grid-day wknd"><span class="gday">25</span></td></tr>
+<tr><td class="grid-day wknd"><span class="gday">26</span></td><td class="grid-day"><span class="gday">27</span></td><td class="grid-day"><span class="gday">28</span></td><td class="grid-day"><span class="gday">29</span><div class="dots"><span class="dot" style="background:#8A1A1A;"></span></div></td><td class="grid-day"><span class="gday">30</span></td><td class="grid-day"><span class="gday">31</span></td><td class="empty"></td></tr>
+</tbody></table>
+            </div>
+        </div>
+
+</div>
+
+<div class="footer">
+    <span class="footer-left">CTE–Linked Learning Department · Division of Instruction · LAUSD</span>
+    <span>Auto-generated from <code>CTE-LL_Calendar_Events_2026-27.csv</code> · June 02, 2026</span>
+</div>
+
+</body>
+</html>
