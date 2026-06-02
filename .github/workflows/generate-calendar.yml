@@ -6,6 +6,9 @@ on:
       - 'CTE-LL_Calendar_Events_2026-27.csv'
       - 'generate_cte_ll_calendar.py'
   workflow_dispatch:
+  
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 permissions:
   contents: write
