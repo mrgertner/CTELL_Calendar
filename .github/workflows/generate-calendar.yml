@@ -3,10 +3,10 @@ name: Generate CTE-LL Calendar
 on:
   push:
     paths:
-      - 'CTE-LL_Calendar_Events_2026-27.csv'
+      - '26-27_Admin_Calendar_Events_CTE-LL_Version.xlsx'
       - 'generate_cte_ll_calendar.py'
   workflow_dispatch:
-  
+
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
@@ -18,20 +18,23 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4.2.2
+        uses: actions/checkout@v4
 
       - name: Set up Python
-        uses: actions/setup-python@v5.6.0
+        uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install openpyxl
 
       - name: Generate calendar dashboard
         run: python generate_cte_ll_calendar.py
 
-      - name: Commit generated HTML
+      - name: Commit generated files
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add CTE-LL_Calendar_2026-27.html
-          git diff --cached --quiet || git commit -m "🗓️ Auto-generate CTE-LL Calendar dashboard"
+          git add CTE-LL_Calendar_Events_2026-27.csv CTE-LL_Calendar_2026-27.html
+          git diff --cached --quiet || git commit -m "🗓️ Auto-generate CTE-LL Calendar from xlsx"
           git push
