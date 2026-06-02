@@ -7,8 +7,6 @@ Layout:
   - 13 months stacked in a single column (Jul 2026 – Jul 2027)
   - Each month: LEFT = event list  |  RIGHT = traditional day-grid
   - Event list format: "day# – Event Name emoji"
-  - Legend: 🧰 NTST · 🐦 CTE · ▶️ LL · 📰 DE · 📗 WBL · 💰 G&F · 📧 ALL · 🏫 Special Projects
-  - Confirmed (●) and Hold (◆) status indicators
 
 Usage:
     python generate_cte_ll_calendar.py [csv_path] [html_path]
