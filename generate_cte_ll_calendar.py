@@ -320,13 +320,12 @@ body {{
     display: block;
 }}
 .cover-wordmark {{
-    height: 32px;
-    width: auto;
-    display: block;
-    margin-bottom: 8px;
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 6px;
 }}
 .cover-wordmark svg {{
-    height: 32px;
+    height: 24px;
     width: auto;
     display: block;
 }}
@@ -348,13 +347,16 @@ body {{
 }}
 .cover-right {{
     text-align: right;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
 }}
 .cover-year {{
-    font-size: 60px;
+    font-size: 24px;
     font-weight: 700;
     color: {GOLD};
     line-height: 1;
-    letter-spacing: -2px;
+    letter-spacing: -1px;
     opacity: 0.9;
 }}
 
@@ -552,12 +554,12 @@ body {{
     <div class="cover-left">
         <div class="cover-seal">__SEAL_SVG__</div>
         <div class="cover-text">
-            <div class="cover-wordmark">__WORDMARK_SVG__</div>
             <div class="cover-title">CTE – Linked Learning<br><span>Department Calendar</span></div>
             <div class="cover-sub">Division of Instruction &nbsp;·&nbsp; Los Angeles Unified School District</div>
         </div>
     </div>
     <div class="cover-right">
+        <div class="cover-wordmark">__WORDMARK_SVG__</div>
         <div class="cover-year">2026–27</div>
         <div class="cover-sub" style="color:rgba(255,255,255,0.45);text-align:right;margin-top:6px;">Generated {ts}</div>
     </div>
