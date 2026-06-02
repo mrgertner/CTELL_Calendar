@@ -1,17 +1,22 @@
 #!/usr/bin/env python3
 """
 generate_cte_ll_calendar.py
-Reads CTE-LL_Calendar_Events_2026-27.csv and produces CTE-LL_Calendar_2026-27.html
+Reads the CTE-LL Admin Calendar xlsx (or CSV) and produces CTE-LL_Calendar_2026-27.html
 
-Layout:
-  - 13 months stacked in a single column (Jul 2026 – Jul 2027)
-  - Each month: LEFT = event list  |  RIGHT = traditional day-grid
-  - Event list format: "day# – Event Name emoji"
-  - Legend: 🧰 NTST · 🐦 CTE · ▶️ LL · 📰 DE · 📗 WBL · 💰 G&F · 📧 ALL · 🏫 Special Projects
-  - Confirmed (●) and Hold (◆) status indicators
+Accepts either:
+  - The xlsx exported from Google Sheets (26-27_Admin_Calendar_Events_CTE-LL_Version.xlsx)
+  - A pre-converted CSV (CTE-LL_Calendar_Events_2026-27.csv)
+
+When given an xlsx, it automatically converts it to the intermediate CSV first,
+then generates the HTML — no separate conversion step needed.
 
 Usage:
-    python generate_cte_ll_calendar.py [csv_path] [html_path]
+    python generate_cte_ll_calendar.py [input_file] [html_path]
+
+    Defaults:
+      input_file: 26-27_Admin_Calendar_Events_CTE-LL_Version.xlsx
+                  (falls back to CTE-LL_Calendar_Events_2026-27.csv if xlsx not found)
+      html_path:  CTE-LL_Calendar_2026-27.html
 """
 
 import csv, sys, os, re, html as html_mod
@@ -19,8 +24,127 @@ from datetime import datetime, date, timedelta
 from collections import defaultdict
 from calendar import monthrange, monthcalendar
 
+XLSX_DEFAULT = "26-27_Admin_Calendar_Events_CTE-LL_Version.xlsx"
 CSV_DEFAULT  = "CTE-LL_Calendar_Events_2026-27.csv"
 HTML_DEFAULT = "CTE-LL_Calendar_2026-27.html"
+
+# Team emojis in priority order (longer multi-emoji first)
+TEAM_EMOJIS = ["📰🐦▶️", "🧰", "🐦", "▶️", "📰", "📗", "💰", "📧", "🏫"]
+
+DATE_FORMATS = [
+    "%A, %m/%d/%y",
+    "%A, %m/%d/%Y",
+    "%m/%d/%Y",
+    "%m/%d/%y",
+    "%Y-%m-%d",
+]
+
+def _parse_date_str(raw):
+    """Parse a date string to YYYY-MM-DD, or None if unparseable."""
+    if not raw:
+        return None
+    raw = str(raw).strip()
+    if re.match(r'^\d{4}-\d{2}-\d{2}$', raw):
+        return raw
+    # Strip time component that xlsx sometimes adds
+    raw = re.sub(r'\s+\d{1,2}:\d{2}(:\d{2})?$', '', raw).strip()
+    for fmt in DATE_FORMATS:
+        try:
+            return datetime.strptime(raw, fmt).strftime("%Y-%m-%d")
+        except ValueError:
+            continue
+    return None
+
+def _extract_team(event_name):
+    """Return the first team emoji found in the event name."""
+    for emoji in TEAM_EMOJIS:
+        if emoji in (event_name or ""):
+            return emoji
+    return ""
+
+def _normalize_status(raw):
+    s = (raw or "").strip()
+    if "Confirmed" in s or s == "●":
+        return "Confirmed"
+    if "Hold" in s or s == "◆":
+        return "Hold"
+    return ""
+
+def _get(row, *keys):
+    """Flexible column getter — tries multiple name variants."""
+    for k in keys:
+        for rk in row:
+            if rk and k.lower().strip() in str(rk).lower().strip():
+                v = row[rk]
+                return str(v).strip() if v is not None else ""
+    return ""
+
+
+# ── xlsx → CSV conversion ──────────────────────────────────────────────────────
+def convert_xlsx_to_csv(xlsx_path, csv_path):
+    """Read the admin calendar xlsx and write a generator-ready CSV."""
+    try:
+        import openpyxl
+    except ImportError:
+        print("❌ openpyxl required for xlsx input.  Run: pip install openpyxl")
+        sys.exit(1)
+
+    wb = openpyxl.load_workbook(xlsx_path, data_only=True)
+    ws = wb["26-27 Events"] if "26-27 Events" in wb.sheetnames else wb.active
+
+    rows = list(ws.iter_rows(values_only=True))
+
+    # Find header row (contains "Event Name")
+    header_idx = None
+    for i, row in enumerate(rows):
+        if any("Event Name" in str(c) for c in row if c):
+            header_idx = i
+            break
+    if header_idx is None:
+        print("❌ Could not find header row in xlsx")
+        sys.exit(1)
+
+    headers = [str(c).strip() if c else "" for c in rows[header_idx]]
+    data_rows = [dict(zip(headers, r)) for r in rows[header_idx + 1:]]
+
+    OUT_FIELDS = ["Date", "Status", "Team", "Event Name",
+                  "Audience", "Lead Contact", "Location", "Notes"]
+
+    out_rows = []
+    skipped = 0
+    for row in data_rows:
+        if not any(str(v).strip() for v in row.values() if v):
+            continue
+        start = _parse_date_str(_get(row, "Date"))
+        if not start:
+            skipped += 1
+            continue
+        end = _parse_date_str(_get(row, "End Date"))
+        date_field = f"{start}:{end}" if (end and end != start) else start
+
+        event_name = _get(row, "Event Name")
+        if not event_name:
+            continue
+
+        out_rows.append({
+            "Date":         date_field,
+            "Status":       _normalize_status(_get(row, "Status")),
+            "Team":         _extract_team(event_name),
+            "Event Name":   event_name,
+            "Audience":     _get(row, "Audience"),
+            "Lead Contact": _get(row, "Lead Contact", "Lead"),
+            "Location":     _get(row, "Location"),
+            "Notes":        _get(row, "Notes"),
+        })
+
+    with open(csv_path, "w", newline="", encoding="utf-8") as f:
+        writer = csv.DictWriter(f, fieldnames=OUT_FIELDS)
+        writer.writeheader()
+        writer.writerows(out_rows)
+
+    print(f"📋 Converted xlsx → {csv_path}  ({len(out_rows)} events"
+          + (f", {skipped} TBD rows skipped)" if skipped else ")"))
+    return csv_path
 
 # LAUSD brand
 NAVY   = "#00237A"
@@ -603,9 +727,30 @@ body {{
 
 
 if __name__ == "__main__":
-    csv_path  = sys.argv[1] if len(sys.argv) > 1 else CSV_DEFAULT
-    html_path = sys.argv[2] if len(sys.argv) > 2 else HTML_DEFAULT
-    if not os.path.isfile(csv_path):
-        print(f"❌ CSV not found: {csv_path}")
+    input_path = sys.argv[1] if len(sys.argv) > 1 else None
+    html_path  = sys.argv[2] if len(sys.argv) > 2 else HTML_DEFAULT
+
+    # Auto-detect input: prefer xlsx default, fall back to CSV default
+    if input_path is None:
+        if os.path.isfile(XLSX_DEFAULT):
+            input_path = XLSX_DEFAULT
+        elif os.path.isfile(CSV_DEFAULT):
+            input_path = CSV_DEFAULT
+        else:
+            print(f"❌ No input file found. Expected:\n"
+                  f"   {XLSX_DEFAULT}  (xlsx from Google Sheets)\n"
+                  f"   {CSV_DEFAULT}   (pre-converted CSV)")
+            sys.exit(1)
+
+    if not os.path.isfile(input_path):
+        print(f"❌ Input file not found: {input_path}")
         sys.exit(1)
+
+    # Convert xlsx → CSV if needed
+    ext = os.path.splitext(input_path)[1].lower()
+    if ext in (".xlsx", ".xlsm", ".xls"):
+        csv_path = convert_xlsx_to_csv(input_path, CSV_DEFAULT)
+    else:
+        csv_path = input_path
+
     generate_html(csv_path, html_path)
