@@ -35,6 +35,6 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add CTE-LL_Calendar_Events_2026-27.csv CTE-LL_Calendar_2026-27.html
-          git diff --cached --quiet || git commit -m "🗓️ Auto-generate CTE-LL Calendar from xlsx"
+          git add -A
+          git diff --cached --quiet || git commit -m "🗓️ Auto-generate CTE-LL Calendars (internal + external) from xlsx"
           git push
